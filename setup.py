@@ -113,12 +113,15 @@ setup_args = {
         'Operating System     :: POSIX',
         'Operating System     :: Unix'
     ],
+
+    'dependency_links': ['https://github.com/saga-project/saga-pilot/tarball/master#egg=sagapilot'],
+
     'packages'         : ["src/radicalcybertools/bac"], 
     'package_data'     : {'': ['*.sh']},
     #'test_suite'       : 'sinon.tests',
     'install_requires' : ['setuptools',
                           'BigJob',
-                          'saga-pilot'],
+                          'sagapilot'],
     #'tests_require'    : ['setuptools', 'nose'],
     #'test_suite'       : 'sinon.tests',
     'zip_safe'         : False,
