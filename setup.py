@@ -61,7 +61,7 @@ def get_version():
 
         # make sure the version files exist for the runtime version inspection
         open ('%s/VERSION' % srcroot, 'w').write (long_version+"\n")
-        open ('%s/src/radicalcybertools/bac/VERSION' % srcroot, 'w').write (long_version+"\n")
+        open ('%s/src/radical/ensemblemd/bac/VERSION' % srcroot, 'w').write (long_version+"\n")
 
 
     except Exception as e :
@@ -86,15 +86,15 @@ def read(*rnames):
 
 #-----------------------------------------------------------------------------
 setup_args = {
-    'name'             : 'radicalcybertools.htbac',
+    'name'             : 'radical.ensemblemd.bac',
     'version'          : short_version,
-    'description'      : "HT-BAC is a tool for molecular dynamics binding affinity calculations.",
+    'description'      : "BAC is a tool for molecular dynamics binding affinity calculations.",
     'long_description' : (read('README.md') + '\n\n' + read('CHANGES.md')),
     'author'           : 'RADICAL Group at Rutgers University',
     'author_email'     : 'ole.weidner@rutgers.edu',
     'maintainer'       : "Ole Weidner", 
     'maintainer_email' : 'ole.weidner@rutgers.edu',
-    'url'              : 'https://github.com/radical-cybertools/HT-BAC',
+    'url'              : 'https://github.com/radical-cybertools',
     'license'          : 'MIT',
     'keywords'         : "molecular dynamics binding affinity calculations",
     'classifiers'      :  [
@@ -114,16 +114,17 @@ setup_args = {
         'Operating System     :: Unix'
     ],
 
-    'dependency_links': ['https://github.com/saga-project/saga-pilot/tarball/master#egg=sagapilot'],
+    #'dependency_links': ['https://github.com/saga-project/saga-pilot/tarball/master#egg=sagapilot'],
 
-    'packages'         : ["src/radicalcybertools/bac"], 
-    'package_data'     : {'': ['*.sh']},
-    #'test_suite'       : 'sinon.tests',
-    'install_requires' : ['setuptools',
-                          'BigJob',
-                          'sagapilot'],
-    #'tests_require'    : ['setuptools', 'nose'],
-    #'test_suite'       : 'sinon.tests',
+    'namespace_packages': ['radical', 'radical.ensemblemd'],
+    'packages'    : find_packages('src'),
+    'package_dir' : {'': 'src'},  
+
+    'package_data'     : {'': ['*.sh', 'VERSION', 'VERSION.git', ]},
+    'install_requires' : ['setuptools>=1',],
+                        #  'BigJob',],
+                         # 'sagagpilot'],
+
     'zip_safe'         : False,
 }
 
