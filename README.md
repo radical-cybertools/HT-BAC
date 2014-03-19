@@ -7,6 +7,11 @@ HT-BAC is a tool for molecular dynamics binding affinity calculations.
 
 # 1. Installation
 
+```
+git clone https://github.com/radical-cybertools/HT-BAC.git
+cd HT-BAC
+python setup.py install
+```
 
 # 2. Usage
 
@@ -112,7 +117,7 @@ mmpbsa_py_energy found! Using /opt/apps/intel13/mvapich2_1_9/amber/12.0/bin/mmpb
 cpptraj found! Using /opt/apps/intel13/mvapich2_1_9/amber/12.0/bin/cpptraj
 ```
 
-### 2.g1.3 Running a Free Energy Calculation Workload
+### 2.1.3 Running a Free Energy Calculation Workload
 
 A sample workload file (workload.py) is provided in which multiple MMPBSA tasks are defined. A workload is passed to the freenrg.py tool via the --workload= flag. Change the workload in the file to your specific needs:
 
