@@ -21,8 +21,8 @@ This example shows how to run a set of free energy calculations using AMBER / [M
 
 ### 2.1.1 Configuration
 
-A simple configuration file (`config.py`)is provided in which the allocation and resource 
-parameters are set. Configuration files are passed to the `freenrg.py` tool via the `--config=` flag. Change any of the values in the file to your specific needs: 
+A simple configuration file (`examples/bac/config.py`)is provided in which the allocation and resource 
+parameters are set. Configuration files are passed to the `radical-freenerg-run` tool via the `--config=` flag. Change any of the values in the file to your specific needs: 
 
 ```
 CONFIG = {
@@ -40,7 +40,7 @@ The `freenrg` script provides two 'test modes' (`--checkenv` and `--testjob`) in
 Before you start running large simulations on a resource, you should run `--checkenv` test mode at least once to ensure that the environment is ok:
 
 ```
-$> python freenrg.py --config=config.py --checkenv
+$> radical-freenerg-run --config=examples/bac/config.py --checkenv
 ``` 
 
 The output should look like this:
@@ -65,7 +65,7 @@ Once `--checkenv` has passed, you can run `--testjob`. In this test mode, a sing
 
 
 ```
-$> python freenrg.py --config=config.py --testjob
+$> radical-freenerg-run --config=examples/bac/config.py --testjob
 ```
 
 The output should look like this:
@@ -119,7 +119,7 @@ cpptraj found! Using /opt/apps/intel13/mvapich2_1_9/amber/12.0/bin/cpptraj
 
 ### 2.1.3 Running a Free Energy Calculation Workload
 
-A sample workload file (workload.py) is provided in which multiple MMPBSA tasks are defined. A workload is passed to the freenrg.py tool via the --workload= flag. Change the workload in the file to your specific needs:
+A sample workload file (`examples/bac/workload.py`) is provided in which multiple MMPBSA tasks are defined. A workload is passed to the freenrg.py tool via the --workload= flag. Change the workload in the file to your specific needs:
 
 ```
 WORKLOAD = []
@@ -153,7 +153,7 @@ source $HOME/MDStack/bin/activate
 pip install bigjob
 pip install --upgrade -e git://github.com/radical-cybertools/BigJobAsync.git@master#egg=bigjobasync
 
-python freenrg.py --config=config.py --workload=workload.py
+radical-freenerg-run --config=config.py --workload=workload.py
 ```
 
 Now you can detach from your tmux session or simply leave the terminal open. At some point you will see a message similar to this:

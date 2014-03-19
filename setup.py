@@ -116,7 +116,7 @@ setup_args = {
 
     'entry_points': {
         'console_scripts': 
-            ['radical-bac-run = radical.ensemblemd.bac.bin.bacrun:main']
+            ['radical-freenrg-run = radical.ensemblemd.bac.bin.freenrgrun:main']
     },
 
     #'dependency_links': ['https://github.com/saga-project/saga-pilot/tarball/master#egg=sagapilot'],
