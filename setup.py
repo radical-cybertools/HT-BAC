@@ -114,6 +114,11 @@ setup_args = {
         'Operating System     :: Unix'
     ],
 
+    'entry_points': {
+        'console_scripts': 
+            ['radical-bac-run = radical.ensemblemd.bac.bin.bacrun:main']
+    },
+
     #'dependency_links': ['https://github.com/saga-project/saga-pilot/tarball/master#egg=sagapilot'],
 
     'namespace_packages': ['radical', 'radical.ensemblemd'],
