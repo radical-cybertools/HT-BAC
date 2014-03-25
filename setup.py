@@ -119,17 +119,13 @@ setup_args = {
             ['radical-freenrg-run = radical.ensemblemd.bac.bin.freenrgrun:main']
     },
 
-    #'dependency_links': ['https://github.com/saga-project/saga-pilot/tarball/master#egg=sagapilot'],
-
     'namespace_packages': ['radical', 'radical.ensemblemd'],
     'packages'    : find_packages('src'),
     'package_dir' : {'': 'src'},  
 
     'package_data'     : {'': ['*.sh', 'VERSION', 'VERSION.git', ]},
-    'install_requires' : ['setuptools>=1',],
-                        #  'BigJob',],
-                         # 'sagagpilot'],
-
+    'install_requires' : ['setuptools>=1', 
+                          'radical.pilot'],
     'zip_safe'         : False,
 }
 

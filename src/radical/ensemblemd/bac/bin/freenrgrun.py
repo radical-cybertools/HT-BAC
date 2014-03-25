@@ -13,9 +13,18 @@ import imp
 import os, sys, uuid
 import urllib
 import optparse
-import bigjobasync 
+import radical.pilot 
 
 from radical.ensemblemd.bac.kernel import KERNEL
+
+DBURL = os.getenv("RADICALPILOT_DBURL")
+if DBURL is None:
+    print "ERROR: RADICALPILOT_DBURL (MongoDB server URL) is not defined."
+    sys.exit(1)
+
+RCONF  = ["https://raw.github.com/radical-cybertools/radical.pilot/master/configs/xsede.json",
+          "https://raw.github.com/radical-cybertools/radical.pilot/master/configs/futuregrid.json"]
+
 
 # ----------------------------------------------------------------------------
 #
@@ -274,54 +283,61 @@ def run_sanity_check(config):
     """Runs a simple job that performs some sanity tests, determines 
     AMBER version, etc.
     """
-    resource_name = config['resource']
-    username      = config['username']
-    workdir       = config['workdir']
-    allocation    = config['allocation']
+    resource_name  = config['resource']
+    cores_per_node = config['cores_per_node']
+    username       = config['username']
+    allocation     = config['allocation']
+
+    session = radical.pilot.Session(database_url=DBURL)
+
+    try:
+        # Add an ssh identity to the session.
+        cred = radical.pilot.SSHCredential()
+        cred.user_id = username
+        session.add_credential(cred)
+
+        ############################################################
+        # The resource allocation
+        pmgr = radical.pilot.PilotManager(session=session, resource_configurations=RCONF)
+        pmgr.register_callback(resource_cb)
+
+        pdesc = radical.pilot.ComputePilotDescription()
+        pdesc.resource   = resource_name
+        pdesc.runtime    = 15 # minutes
+        pdesc.cores      = int(cores_per_node) * 1 # one node 
+        pdesc.allocation = allocation
+
+        pilot = pmgr.submit_pilots(pdesc)
+
+        ############################################################
+        # The test task
+        kernelcfg = KERNEL["MMPBSA"]["resources"][resource_name]
+
+        cudesc = radical.pilot.ComputeUnitDescription()
+        cudesc.environment = kernelcfg["environment"]
+        cudesc.executable = "/bin/bash"
+        cudesc.arguments = ["-l", "-c", "\"%s && echo -n MMPBSA path: && which %s && echo -n MMPBSA version: && %s --version\"" % \
+                (kernelcfg["pre_execution"], kernelcfg["executable"], kernelcfg["executable"]) ]
+        cudesc.cores = 1
+
+
+        umgr = radical.pilot.UnitManager(session=session,
+            scheduler=radical.pilot.SCHED_DIRECT_SUBMISSION)
+        umgr.register_callback(task_cb)
+        umgr.add_pilots(pilot)
+
+        umgr.submit_units(cudesc)
+        umgr.wait_units()
+
+        session.close()
+
+    except Exception, ex:
+        print "ERROR during execution: %s" % str(ex)
+        session.close()
+        return 1
 
     ############################################################
-    # The resource allocation
-    cluster = bigjobasync.Resource(
-        name       = resource_name, 
-        resource   = bigjobasync.RESOURCES[resource_name],
-        username   = username,
-        runtime    = 5, 
-        cores      = 16, 
-        workdir    = workdir,
-        project_id = allocation
-    )
-    cluster.register_callbacks(resource_cb)
-    cluster.allocate(terminate_on_empty_queue=True)
-
-    ############################################################
-    # The test task
-    output_file = "./MMPBSA-test-task-%s.OUT" % str(uuid.uuid4())
-
-    kernelcfg = KERNEL["MMPBSA"]["resources"][resource_name]
-
-    mmpbsa_check_task = bigjobasync.Task(
-        name        = "MMPBSA-check-task",
-        cores       = 1,
-        environment = kernelcfg["environment"],
-        executable  = "/bin/bash",
-        arguments   = ["-l", "-c", "\"%s && echo -n MMPBSA path: && which %s && echo -n MMPBSA version: && %s --version\"" % \
-            (kernelcfg["pre_execution"], kernelcfg["executable"], kernelcfg["executable"]) ],
-
-        output = [
-            {
-                "mode"              : bigjobasync.COPY, 
-                "origin_path"       : "STDOUT" ,      
-                "destination"       : bigjobasync.LOCAL,
-                "destination_path"  : output_file,
-                "trasfer_if_failed" : False
-            }
-        ]
-    )
-    mmpbsa_check_task.register_callbacks(task_cb)
-
-    cluster.schedule_tasks([mmpbsa_check_task])
-    cluster.wait()
-
+    # Output the result
     try: 
         with open(output_file, 'r') as content_file:
             content = content_file.read()
