@@ -2,61 +2,55 @@
 
 ### A High-Throughput Binding Affinity Calculation Tools
 
-HT-BAC is a tool for molecular dynamics binding affinity calculations.
+HT-BAC is a set of tools for molecular dynamics binding affinity calculations.
 
 
 # 1. Installation
 
 ```
-git clone https://github.com/radical-cybertools/HT-BAC.git
-cd HT-BAC
-python setup.py install
+pip install --upgrade -e git://github.com/radical-cybertools/HT-BAC.git@master#egg=radical.ensemblemd.bac
 ```
 
 # 2. Usage
 
-## 2.1 Free Energy Calculations (`freenrg`)
+## 2.1 Free Energy Calculations (`radical-bac-fecalc`)
 
 This example shows how to run a set of free energy calculations using AMBER / [MMPBSA.py](http://pubs.acs.org/doi/abs/10.1021/ct300418h).
 
 ### 2.1.1 Configuration
 
-A simple configuration file (`examples/bac/config.py`)is provided in which the allocation and resource 
+A simple configuration file (`examples/fecalc/config.py`)is provided in which the allocation and resource 
 parameters are set. Configuration files are passed to the `radical-freenerg-run` tool via the `--config=` flag. Change any of the values in the file to your specific needs: 
 
 ```
 CONFIG = {
-    'resource'      : 'XSEDE.STAMPEDE',
-    'username'      : 'tg802352',
-    'workdir'       : '/scratch/00988/tg802352/freenrg/',
-    'allocation'    : 'TG-MCB090174'
+    "resource"      : "stampede.tacc.utexas.edu",
+    "cores_per_node": 16,
+    "username"      : "tg802352",
+    "allocation"    : "TG-MCB090174"
 }
 ```
 
 ### 2.1.2 Test Mode
 
-The `freenrg` script provides two 'test modes' (`--checkenv` and `--testjob`) in which only a single task is submitted to the remote cluster to check wether the environment is healthy and usable.  
+The `radical-bac-fecalc` script provides two 'test modes' (`--checkenv` and `--testjob`) in which only a single task is submitted to the remote cluster to check wether the environment is healthy and usable.  
 
 Before you start running large simulations on a resource, you should run `--checkenv` test mode at least once to ensure that the environment is ok:
 
 ```
-$> radical-freenerg-run --config=examples/bac/config.py --checkenv
+$> radical-bac-fecalc --config=examples/fecalc/config.py --checkenv
 ``` 
 
 The output should look like this:
 
 ```
- * Task MMPBSA-test-task state changed from 'New' to 'TransferringInput'.
- * Task MMPBSA-test-task state changed from 'TransferringInput' to 'WaitingForExecution'.
- * Resource '<_BigJobWorker(_BigJobWorker-9, started daemon)>' state changed from 'New' to 'Pending'.
- * Task MMPBSA-test-task state changed from 'WaitingForExecution' to 'Pending'.
- * Resource '<_BigJobWorker(_BigJobWorker-9, started daemon)>' state changed from 'Pending' to 'Running'.
- * Task MMPBSA-test-task state changed from 'Pending' to 'Running'.
- * Task MMPBSA-test-task state changed from 'Running' to 'WaitingForOutputTransfer'.
- * Task MMPBSA-test-task state changed from 'WaitingForOutputTransfer' to 'TransferringOutput'.
- * Task MMPBSA-test-task state changed from 'TransferringOutput' to 'Done'.
+ * Task 53331fa26bf88b22b2662eab state changed to 'PendingExecution'.
+ * Resource '53331f9c6bf88b22b2662ea9' state changed to 'Running'.
+ * Task 53331fa26bf88b22b2662eab state changed to 'Running'.
+ * Task 53331fa26bf88b22b2662eab state changed to 'Done'.
 
-Test task results:
+RESULT:
+
 MMPBSA path:/opt/apps/intel13/mvapich2_1_9/amber/12.0/bin/MMPBSA.py
 MMPBSA version:MMPBSA.py: Version 13.0
 ```
@@ -65,7 +59,7 @@ Once `--checkenv` has passed, you can run `--testjob`. In this test mode, a sing
 
 
 ```
-$> radical-freenerg-run --config=examples/bac/config.py --testjob
+$> radical-bac-fecalc --config=examples/bac/config.py --testjob
 ```
 
 The output should look like this:
@@ -119,7 +113,7 @@ cpptraj found! Using /opt/apps/intel13/mvapich2_1_9/amber/12.0/bin/cpptraj
 
 ### 2.1.3 Running a Free Energy Calculation Workload
 
-A sample workload file (`examples/bac/workload.py`) is provided in which multiple MMPBSA tasks are defined. A workload is passed to the freenrg.py tool via the --workload= flag. Change the workload in the file to your specific needs:
+A sample workload file (`examples/bac/workload.py`) is provided in which multiple MMPBSA tasks are defined. A workload is passed to the radical-bac-fecalc.py tool via the --workload= flag. Change the workload in the file to your specific needs:
 
 ```
 WORKLOAD = []
@@ -150,10 +144,9 @@ In your (new) `tmux` session, active your virtual environment, update BigJobAsyn
 
 ```
 source $HOME/MDStack/bin/activate
-pip install bigjob
-pip install --upgrade -e git://github.com/radical-cybertools/BigJobAsync.git@master#egg=bigjobasync
+pip install --upgrade -e git://github.com/radical-cybertools/HT-BAC.git@master#egg=radical.ensemblemd.bac
 
-radical-freenerg-run --config=config.py --workload=workload.py
+radical-bac-fecalc --config=config.py --workload=workload.py
 ```
 
 Now you can detach from your tmux session or simply leave the terminal open. At some point you will see a message similar to this:
