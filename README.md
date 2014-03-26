@@ -8,7 +8,15 @@ HT-BAC is a set of tools for molecular dynamics binding affinity calculations.
 # 1. Installation
 
 ```
-pip install --upgrade -e git://github.com/radical-cybertools/HT-BAC.git@master#egg=radical.ensemblemd.bac
+git clone https://github.com/radical-cybertools/HT-BAC.git
+cd HT-BAC
+python setup.py install
+```
+
+The following command should return the version number of the tools if the installation was successful:
+
+```
+python -c "import radical.ensemblemd.bac; print radical.ensemblemd.bac.version"
 ```
 
 # 2. Usage
@@ -140,11 +148,10 @@ Once you have defined your workload you can execute it. Due to the potentially l
 >    
 > You can *detach* from a running tmux session by pressing `Ctrl-B D` and *re-attach* by launching tmux via `tmux attach`.
 
-In your (new) `tmux` session, active your virtual environment, update BigJobAsync (just in case) and launch your workload:
+In your (new) `tmux` session, active your virtual environment and launch your workload:
 
 ```
 source $HOME/MDStack/bin/activate
-pip install --upgrade -e git://github.com/radical-cybertools/HT-BAC.git@master#egg=radical.ensemblemd.bac
 
 radical-bac-fecalc --config=config.py --workload=workload.py
 ```
