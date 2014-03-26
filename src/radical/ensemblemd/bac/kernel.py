@@ -8,7 +8,7 @@ KERNEL = {
         "description" : "MMPBSA is AMBER's free energy calculator.",
         "resources" : 
         { 
-            "XSEDE.STAMPEDE" : 
+            "stampede.tacc.utexas.edu" : 
             {
                 "environment"   : {"FOO": "BAR"},
                 "pre_execution" : "module load amber",
@@ -22,7 +22,7 @@ KERNEL = {
         "description" : "A dummy free energy calculator that does NOTHING.",
         "resources" : 
         { 
-            "XSEDE.STAMPEDE" : 
+            "stampede.tacc.utexas.edu" : 
             {
                 "pre_execution" : "/bin/true",
                 "executable"    : "/bin/sleep 10"

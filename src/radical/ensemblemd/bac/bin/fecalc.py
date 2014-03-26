@@ -27,15 +27,14 @@ RCONF  = ["https://raw.github.com/radical-cybertools/radical.pilot/master/config
 
 # ----------------------------------------------------------------------------
 #
-def resource_cb(origin, old_state, new_state):
+def resource_cb(origin, state):
     """Resource callback function: writes resource allocation state 
     changes to STDERR.
     """ 
-    msg = " * Resource '%s' state changed from '%s' to '%s'.\n" % \
-        (str(origin), old_state, new_state)
+    msg = " * Resource '%s' state changed to '%s'.\n" % (origin.uid, state)
     sys.stderr.write(msg)
 
-    if new_state == bigjobasync.FAILED:
+    if state == radical.pilot.FAILED:
         # Print the log and exit if big job has failed
         for entry in origin.log:
             print "   * LOG: %s" % entry
@@ -44,14 +43,13 @@ def resource_cb(origin, old_state, new_state):
 
 # ----------------------------------------------------------------------------
 #
-def task_cb(origin, old_state, new_state):
+def task_cb(origin, state):
     """Task callback function: writes task state changes to STDERR
     """
-    msg = " * Task %s state changed from '%s' to '%s'.\n" % \
-        (str(origin), old_state, new_state)
+    msg = " * Task %s state changed to '%s'.\n" % (origin.uid, state)
     sys.stderr.write(msg)
 
-    if new_state == bigjobasync.FAILED:
+    if state == radical.pilot.FAILED:
         # Print the log entry if task has failed to run
         for entry in origin.log:
             print "     LOG: %s" % entry
@@ -290,7 +288,7 @@ def run_sanity_check(config):
     session = radical.pilot.Session(database_url=DBURL)
 
     try:
-        # Add an ssh identity to the session.
+            # Add an ssh identity to the session.
         cred = radical.pilot.SSHCredential()
         cred.user_id = username
         session.add_credential(cred)
@@ -304,7 +302,8 @@ def run_sanity_check(config):
         pdesc.resource   = resource_name
         pdesc.runtime    = 15 # minutes
         pdesc.cores      = int(cores_per_node) * 1 # one node 
-        pdesc.allocation = allocation
+        pdesc.project    = allocation
+        pdesc.cleanup    = True
 
         pilot = pmgr.submit_pilots(pdesc)
 
@@ -312,12 +311,12 @@ def run_sanity_check(config):
         # The test task
         kernelcfg = KERNEL["MMPBSA"]["resources"][resource_name]
 
-        cudesc = radical.pilot.ComputeUnitDescription()
-        cudesc.environment = kernelcfg["environment"]
-        cudesc.executable = "/bin/bash"
-        cudesc.arguments = ["-l", "-c", "\"%s && echo -n MMPBSA path: && which %s && echo -n MMPBSA version: && %s --version\"" % \
+        task_desc = radical.pilot.ComputeUnitDescription()
+        task_desc.environment = kernelcfg["environment"]
+        task_desc.executable = "/bin/bash"
+        task_desc.arguments = ["-l", "-c", "\"%s && echo -n MMPBSA path: && which %s && echo -n MMPBSA version: && %s --version\"" % \
                 (kernelcfg["pre_execution"], kernelcfg["executable"], kernelcfg["executable"]) ]
-        cudesc.cores = 1
+        task_desc.cores = 1
 
 
         umgr = radical.pilot.UnitManager(session=session,
@@ -325,8 +324,11 @@ def run_sanity_check(config):
         umgr.register_callback(task_cb)
         umgr.add_pilots(pilot)
 
-        umgr.submit_units(cudesc)
+        task = umgr.submit_units(task_desc)
         umgr.wait_units()
+
+        print "\nRESULT:\n"
+        print task.stdout
 
         session.close()
 
@@ -334,17 +336,6 @@ def run_sanity_check(config):
         print "ERROR during execution: %s" % str(ex)
         session.close()
         return 1
-
-    ############################################################
-    # Output the result
-    try: 
-        with open(output_file, 'r') as content_file:
-            content = content_file.read()
-            print content
-        os.remove(output_file)
-
-    except Exception:
-        pass
 
     return 0
 
