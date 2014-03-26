@@ -116,7 +116,8 @@ setup_args = {
 
     'entry_points': {
         'console_scripts': 
-            ['radical-freenrg-run = radical.ensemblemd.bac.bin.freenrgrun:main']
+            ['radical-bac-fecalc = radical.ensemblemd.bac.bin.fecalc:main',
+             'radical-bac-sim = radical.ensemblemd.bac.bin.sim:main']
     },
 
     'namespace_packages': ['radical', 'radical.ensemblemd'],

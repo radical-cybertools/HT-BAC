@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-"""This example illustrates how to run free energy calculations with Amber
-MMPBSA.py for N replicas. 
+"""This tool runs free energy calculations with Amber MMPBSA.py. 
 """
 
 __author__    = "Ole Weidner"
