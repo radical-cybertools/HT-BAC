@@ -13,6 +13,8 @@
 0.2.0 Milestone / Demo 2 Release                       March 26. 2014
 ---------------------------------------------------------------------
 
+* setup scripts, command line tools, etc
+* migrated to radical-pilot
 
 0.1.0 Milestone / Demo 1 Release                       March 12. 2014
 ---------------------------------------------------------------------

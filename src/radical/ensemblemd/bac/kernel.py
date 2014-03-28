@@ -3,29 +3,23 @@
 
 KERNEL = {
 
-    "MMPBSA" : 
+    "stampede.tacc.utexas.edu": 
     {
-        "description" : "MMPBSA is AMBER's free energy calculator.",
-        "resources" : 
-        { 
-            "stampede.tacc.utexas.edu" : 
-            {
-                "environment"   : {"FOO": "BAR"},
+        "params": 
+        {
+            "cores_per_node": 16,
+        },
+        "kernel":
+        {
+            "mmpbsa": {
+                "environment"   : {},
                 "pre_execution" : "module load amber",
                 "executable"    : "/opt/apps/intel13/mvapich2_1_9/amber/12.0/bin/MMPBSA.py"
-            }
-        }
-    },
-
-    'DUMMY' : 
-    {
-        "description" : "A dummy free energy calculator that does NOTHING.",
-        "resources" : 
-        { 
-            "stampede.tacc.utexas.edu" : 
-            {
-                "pre_execution" : "/bin/true",
-                "executable"    : "/bin/sleep 10"
+            },
+            "namd": {
+                "environment"   : {},
+                "pre_execution" : "module load namd/2.9",
+                "executable"    : "/opt/apps/intel13/mvapich2_1_9/namd/2.9/bin/namd2"
             }
         }
     }

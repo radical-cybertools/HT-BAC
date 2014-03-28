@@ -14,6 +14,7 @@ import urllib
 import optparse
 import radical.pilot 
 
+from radical.ensemblemd.bac.callbacks import * 
 from radical.ensemblemd.bac.kernel import KERNEL
 
 DBURL = os.getenv("RADICALPILOT_DBURL")
@@ -23,36 +24,6 @@ if DBURL is None:
 
 RCONF  = ["https://raw.github.com/radical-cybertools/radical.pilot/master/configs/xsede.json",
           "https://raw.github.com/radical-cybertools/radical.pilot/master/configs/futuregrid.json"]
-
-
-# ----------------------------------------------------------------------------
-#
-def resource_cb(origin, state):
-    """Resource callback function: writes resource allocation state 
-    changes to STDERR.
-    """ 
-    msg = " * Resource '%s' state changed to '%s'.\n" % (origin.uid, state)
-    sys.stderr.write(msg)
-
-    if state == radical.pilot.FAILED:
-        # Print the log and exit if big job has failed
-        for entry in origin.log:
-            print "   * LOG: %s" % entry
-        sys.stderr.write("   * EXITING.\n")
-        sys.exit(-1)
-
-# ----------------------------------------------------------------------------
-#
-def task_cb(origin, state):
-    """Task callback function: writes task state changes to STDERR
-    """
-    msg = " * Task %s state changed to '%s'.\n" % (origin.uid, state)
-    sys.stderr.write(msg)
-
-    if state == radical.pilot.FAILED:
-        # Print the log entry if task has failed to run
-        for entry in origin.log:
-            print "     LOG: %s" % entry
 
 # ----------------------------------------------------------------------------
 #
@@ -280,15 +251,20 @@ def run_sanity_check(config):
     """Runs a simple job that performs some sanity tests, determines 
     AMBER version, etc.
     """
-    resource_name  = config['resource']
-    cores_per_node = config['cores_per_node']
-    username       = config['username']
-    allocation     = config['allocation']
+    maxcpus = config.MAXCPUS
+    resource = config.RESOURCE
+    username = config.USERNAME
+    allocation = config.ALLOCATION
+
+    resource_params = KERNEL[resource]["params"]
+    cores_per_node = resource_params["cores_per_node"]
+
+    kernelcfg = KERNEL[resource]["kernel"]["mmpbsa"]
 
     session = radical.pilot.Session(database_url=DBURL)
 
     try:
-            # Add an ssh identity to the session.
+        # Add an ssh identity to the session.
         cred = radical.pilot.SSHCredential()
         cred.user_id = username
         session.add_credential(cred)
@@ -299,7 +275,7 @@ def run_sanity_check(config):
         pmgr.register_callback(resource_cb)
 
         pdesc = radical.pilot.ComputePilotDescription()
-        pdesc.resource   = resource_name
+        pdesc.resource   = resource
         pdesc.runtime    = 15 # minutes
         pdesc.cores      = int(cores_per_node) * 1 # one node 
         pdesc.project    = allocation
@@ -309,7 +285,6 @@ def run_sanity_check(config):
 
         ############################################################
         # The test task
-        kernelcfg = KERNEL["MMPBSA"]["resources"][resource_name]
 
         task_desc = radical.pilot.ComputeUnitDescription()
         task_desc.environment = kernelcfg["environment"]
@@ -332,7 +307,7 @@ def run_sanity_check(config):
 
         session.close()
 
-    except Exception, ex:
+    except radical.pilot.PilotException, ex:
         print "ERROR during execution: %s" % str(ex)
         session.close()
         return 1
@@ -346,26 +321,25 @@ def main():
     usage = "usage: %prog --config [--checkenv, --testjob, --workload]"
     parser = optparse.OptionParser(usage=usage)
 
+    parser.add_option('-c', '--config',
+                      metavar='CONFIG',
+                      dest='config',
+                      help='The user-specific configuration file. (REQUIRED)')
+
     parser.add_option('--checkenv',
                       dest='checkenv',
                       action="store_true",
-                      help='Launches a test job to check the execution environment.')
+                      help='Launches a test job to check the remote execution environment.')
 
     parser.add_option('--testjob',
                       dest='testjob',
                       action="store_true",
-                      help='Launches a test job with a single FE calculation.')
-
-    parser.add_option('-c', '--config',
-                      metavar='CONFIG',
-                      dest='config',
-                      help='The machine / resource configuration file. (REQUIRED)')
-
+                      help='Launches a test job with a single calculation task on the remote site.')
 
     parser.add_option('-w', '--workload',
                       metavar='WORKLOAD',
                       dest='workload',
-                      help='Launches the FE tasks defined in the provided WORKLOAD file.')
+                      help='Launches the tasks defined in the provided workload description file.')
 
     # PARSE THE CMD LINE OPTIONS
     (options, args) = parser.parse_args()
@@ -377,7 +351,7 @@ def main():
 
     if options.checkenv is True:
         # RUN THE CHECK ENVIRONMENT JOB
-        result = run_sanity_check(config=config.CONFIG)
+        result = run_sanity_check(config=config)
         sys.exit(result)
 
     elif options.testjob is True:
