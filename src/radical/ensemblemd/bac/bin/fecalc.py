@@ -336,6 +336,11 @@ def main():
                       action="store_true",
                       help='Launches a test job with a single calculation task on the remote site.')
 
+    parser.add_option('--benchmark',
+                      dest='benchmark',
+                      action="store_true",
+                      help='Launches a series of test jobs to test performance and scalability.')
+
     parser.add_option('-w', '--workload',
                       metavar='WORKLOAD',
                       dest='workload',
@@ -357,6 +362,11 @@ def main():
     elif options.testjob is True:
         # RUN THE FE TEST JOB
         result = run_test_job(config=config.CONFIG) 
+        sys.exit(result)
+
+    elif options.benchmark is True:
+        # RUN THE FE BENCHMARK JOBS
+        result = run_benchmark(config=config.CONFIG) 
         sys.exit(result)
 
     elif options.workload is not None:
