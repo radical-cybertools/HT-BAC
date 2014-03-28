@@ -1,4 +1,4 @@
-""" (Sample) workload definition file.
+""" (Sample) workload definition file for .
 """
 
 WORKLOAD = []

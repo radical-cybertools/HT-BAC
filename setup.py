@@ -127,6 +127,10 @@ setup_args = {
     'package_data'     : {'': ['*.sh', 'VERSION', 'VERSION.git', ]},
     'install_requires' : ['setuptools>=1', 
                           'radical.pilot'],
+
+    'tests_require'    : ['setuptools>=1', 'radical.pilot', 'nose'],
+    'test_suite'       : 'radical.ensemblemd.bac.tests',
+
     'zip_safe'         : False,
 }
 

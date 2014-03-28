@@ -9,6 +9,9 @@
 0.3.0 Milestone / Demo 3 Release                       April 16. 2014
 ---------------------------------------------------------------------
 
+* implemented 'sim' tool for namd trajectory generation
+* simplified configuration files 
+* added simple unit tests
 
 0.2.0 Milestone / Demo 2 Release                       March 26. 2014
 ---------------------------------------------------------------------
