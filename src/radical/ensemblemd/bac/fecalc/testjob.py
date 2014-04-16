@@ -141,7 +141,7 @@ def run_testjob(config):
     #         print content
     #     os.remove(output_file)
 
-    #     for key, val in sampledata.iteritems():
+    #     for key, val in sampledata.iteritems():g
     #         os.remove("./%s" % key)
 
     # except Exception:
