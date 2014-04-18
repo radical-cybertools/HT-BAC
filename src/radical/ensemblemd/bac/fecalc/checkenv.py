@@ -8,29 +8,28 @@ __email__     = "ole.weidner@rutgers.edu"
 __copyright__ = "Copyright 2013-2014, The RADICAL Project at Rutgers"
 __license__   = "MIT"
 
+import os
+import sys
 import imp
-import os, sys, uuid
+import uuid
 import urllib
 import optparse
-import radical.pilot 
+import radical.pilot
 
-from radical.ensemblemd.bac.callbacks import * 
+from radical.ensemblemd.bac.callbacks import *
 from radical.ensemblemd.bac.kernel import KERNEL
 
-DBURL = os.getenv("RADICALPILOT_DBURL")
-if DBURL is None:
-    print "ERROR: RADICALPILOT_DBURL (MongoDB server URL) is not defined."
-    sys.exit(1)
 
-RCONF  = ["https://raw.github.com/radical-cybertools/radical.pilot/master/configs/xsede.json",
-          "https://raw.github.com/radical-cybertools/radical.pilot/master/configs/futuregrid.json"]
-
-# ----------------------------------------------------------------------------
+# -----------------------------------------------
 #
 def run_checkenv(config):
-    """Runs a simple job that performs some sanity tests, determines 
+    """Runs a simple job that performs some sanity tests, determines
     AMBER version, etc.
     """
+    server = conf.SERVER
+    dbname = conf.DBNAME
+    rconfs = conf.RCONFS
+
     maxcpus = config.MAXCPUS
     resource = config.RESOURCE
     username = config.USERNAME
@@ -41,7 +40,7 @@ def run_checkenv(config):
 
     kernelcfg = KERNEL[resource]["kernel"]["mmpbsa"]
 
-    session = radical.pilot.Session(database_url=DBURL)
+    session = radical.pilot.Session(database_url=server, database_name=dbname)
 
     try:
         # Add an ssh identity to the session.
@@ -51,7 +50,8 @@ def run_checkenv(config):
 
         ############################################################
         # The resource allocation
-        pmgr = radical.pilot.PilotManager(session=session, resource_configurations=RCONF)
+        pmgr = radical.pilot.PilotManager(
+            session=session, resource_configurations=rconfs)
         pmgr.register_callback(resource_cb)
 
         pdesc = radical.pilot.ComputePilotDescription()
@@ -72,7 +72,6 @@ def run_checkenv(config):
         task_desc.arguments = ["-l", "-c", "\"%s && echo -n MMPBSA path: && which %s && echo -n MMPBSA version: && %s --version\"" % \
                 (kernelcfg["pre_execution"], kernelcfg["executable"], kernelcfg["executable"]) ]
         task_desc.cores = 1
-
 
         umgr = radical.pilot.UnitManager(session=session,
             scheduler=radical.pilot.SCHED_DIRECT_SUBMISSION)
