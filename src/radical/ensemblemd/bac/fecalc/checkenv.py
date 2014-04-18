@@ -26,9 +26,9 @@ def run_checkenv(config):
     """Runs a simple job that performs some sanity tests, determines
     AMBER version, etc.
     """
-    server = conf.SERVER
-    dbname = conf.DBNAME
-    rconfs = conf.RCONFS
+    server = config.SERVER
+    dbname = config.DBNAME
+    rconfs = config.RCONFS
 
     maxcpus = config.MAXCPUS
     resource = config.RESOURCE
@@ -64,7 +64,7 @@ def run_checkenv(config):
         pilot = pmgr.submit_pilots(pdesc)
 
         ############################################################
-        # The test task
+        # The checkenv task
 
         task_desc = radical.pilot.ComputeUnitDescription()
         task_desc.environment = kernelcfg["environment"]

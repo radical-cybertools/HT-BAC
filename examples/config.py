@@ -10,13 +10,19 @@ ALLOCATION = "TG-MCB090174"               # The allocation or project to charge.
 MAXCPUS    = 64                           # Maximum number of CPUs to allocate.
 
 #------------------------------------------------------------------------------
-# Change the settings below *only* if you want to use a different MongoDB
+# Change the settings below *ONLY* if you want to use a different MongoDB
 # server or different / additional resource configuration files.
 #
 SERVER     = "mongodb://ec2-184-72-89-141.compute-1.amazonaws.com:27017"
 DBNAME     = "radical-ht-bac"
 RCONFS     = ["https://raw.github.com/radical-cybertools/radical.pilot/master/configs/xsede.json",
               "https://raw.github.com/radical-cybertools/radical.pilot/master/configs/futuregrid.json"]
+
+#------------------------------------------------------------------------------
+# SAMPLEDATA points to the sample data location that is used for the
+# --testjob modes. DON'T CHANGE THIS.
+#
+SAMPLEDATA = "http://testing.saga-project.org/cybertools/sampledata/"
 
 #------------------------------------------------------------------------------
 # The settings below are only relevant if you want to run the benchmarks.
