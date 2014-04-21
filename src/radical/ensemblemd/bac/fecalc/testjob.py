@@ -94,17 +94,6 @@ def run_testjob(config):
                                        "/%s/lig.top" % os.getcwd(),
                                        "/%s/rep1.traj" % os.getcwd()]
 
-    #     output = [
-    #         {
-    #             "mode"              : bigjobasync.COPY, 
-    #             "origin_path"       : "STDOUT" ,      
-    #             "destination"       : bigjobasync.LOCAL,
-    #             "destination_path"  : output_file,
-    #             "trasfer_if_failed" : True
-    #         }
-    #     ]
-    # )
-
         umgr = radical.pilot.UnitManager(session=session,
             scheduler=radical.pilot.SCHED_DIRECT_SUBMISSION)
         umgr.register_callback(task_cb)
@@ -114,7 +103,7 @@ def run_testjob(config):
         umgr.wait_units()
 
         print "\nRESULT:\n"
-        #print task.stdout
+        print task.stdout
 
         session.close()
 
