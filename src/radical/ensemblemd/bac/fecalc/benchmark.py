@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""This module implements radical-bac-fecalc --benchmark. 
+"""This module implements radical-bac-fecalc --benchmark.
 """
 
 __author__    = "Ole Weidner"
@@ -14,16 +14,9 @@ import urllib
 import optparse
 import radical.pilot 
 
-from radical.ensemblemd.bac.callbacks import * 
+from radical.ensemblemd.bac.callbacks import *
 from radical.ensemblemd.bac.kernel import KERNEL
 
-DBURL = os.getenv("RADICALPILOT_DBURL")
-if DBURL is None:
-    print "ERROR: RADICALPILOT_DBURL (MongoDB server URL) is not defined."
-    sys.exit(1)
-
-RCONF  = ["https://raw.github.com/radical-cybertools/radical.pilot/master/configs/xsede.json",
-          "https://raw.github.com/radical-cybertools/radical.pilot/master/configs/futuregrid.json"]
 
 # ----------------------------------------------------------------------------
 #
