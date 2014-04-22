@@ -61,14 +61,35 @@ def run_workload(config, workload):
     print " * Pilot size (# cores): %s" % pilot_size
     print " * Pilot runtime: %s\n" % pilot_runtime
 
-    return 
-
     tasknum   = 0
     all_tasks = []
 
+    # Create CU descriptions from workload taks...
     for task in workload:
-        print task
+        tasknum += 1
 
+        input_nmode = task["nmode"]
+        input_com   = task["com"]
+        input_rec   = task["rec"]
+        input_lig   = task["lig"]
+        input_traj  = task["traj"]
+
+        mmpbsa_task = radical.pilot.ComputeUnitDescription()
+        mmpbsa_task.environment = kernelcfg["environment"]
+        mmpbsa_task.executable = "/bin/bash"
+        mmpbsa_task.arguments = ["-l", "-c", "\"%s && %s -i %s -cp %s -rp %s -lp %s -y %s \"" % \
+           (kernelcfg["pre_execution"], 
+            kernelcfg["executable"], 
+            input_nmode, input_com, input_rec, input_lig, input_traj
+            )]
+
+        mmpbsa_task.cores = 1
+        mmpbsa_task.output_data = ["FINAL_RESULTS_MMPBSA.dat > traj-%s-FINAL_RESULTS_MMPBSA.dat" % tasknum]
+
+        all_tasks.append(mmpbsa_task)
+
+    # Now that we have created the CU descriptions, we can launch the 
+    # pilot and submit the CUs. 
     session = radical.pilot.Session(database_url=server, database_name=dbname)
 
     try:
@@ -85,51 +106,28 @@ def run_workload(config, workload):
 
         pdesc = radical.pilot.ComputePilotDescription()
         pdesc.resource   = resource
-        pdesc.runtime    = 15 # minutes
-        pdesc.cores      = int(cores_per_node) * 1 # one node
+        pdesc.runtime    = pilot_runtime
+        pdesc.cores      = pilot_size
         pdesc.project    = allocation
         pdesc.cleanup    = True
 
+        pilot = pmgr.submit_pilots(pdesc)
+        pilot.register_callback(resource_cb)
 
+        umgr = radical.pilot.UnitManager(session=session,
+            scheduler=radical.pilot.SCHED_DIRECT_SUBMISSION)
+        umgr.register_callback(task_cb)
+        umgr.add_pilots(pilot)
 
-        #pilot = pmgr.submit_pilots(pdesc)
+        tasks = umgr.submit_units(all_tasks)
+        umgr.wait_units()
 
-        ############################################################
-        # The workload
-        tasknum   = 0
-        all_tasks = []
+        print "\nRESULTS:"
 
-        for task in workload:
-            print task
+        for task in tasks:
+            print " * State: %s STDOUT: %s STDERR: %s" % (task.state, task.stdout, task.stderr)
 
-        ############################################################
-        # The test task
-    #     output_file = "./MMPBSA-test-task-%s" % str(uuid.uuid4())
-
-    #     mmpbsa_test_task = radical.pilot.ComputeUnitDescription()
-    #     mmpbsa_test_task.environment = kernelcfg["environment"]
-    #     mmpbsa_test_task.executable = "/bin/bash"
-    #     mmpbsa_test_task.arguments   = ["-l", "-c", "\"%s && %s -i nmode.5h.py -cp com.top.2 -rp rec.top.2 -lp lig.top -y rep1.traj \"" % \
-    #         (kernelcfg["pre_execution"], kernelcfg["executable"])]
-    #     mmpbsa_test_task.cores = 1
-    #     mmpbsa_test_task.input_data = ["/%s/nmode.5h.py" % os.getcwd(),
-    #                                    "/%s/com.top.2" % os.getcwd(),
-    #                                    "/%s/rec.top.2" % os.getcwd(),
-    #                                    "/%s/lig.top" % os.getcwd(),
-    #                                    "/%s/rep1.traj" % os.getcwd()]
-
-    #     umgr = radical.pilot.UnitManager(session=session,
-    #         scheduler=radical.pilot.SCHED_DIRECT_SUBMISSION)
-    #     umgr.register_callback(task_cb)
-    #     umgr.add_pilots(pilot)
-
-    #     task = umgr.submit_units(mmpbsa_test_task)
-    #     umgr.wait_units()
-
-    #     print "\nRESULT:\n"
-    #     print task.stdout
-
-    #     session.close()
+        session.close()
 
     except radical.pilot.PilotException, ex:
         print "ERROR during execution: %s" % str(ex)
@@ -139,17 +137,3 @@ def run_workload(config, workload):
     except Exception, ex:
         print "ERROR: %s" % str(ex)
         return 1
-
-    # try:
-    # #     with open(output_file, 'r') as content_file:
-    # #         content = content_file.read()
-    # #         print content
-    # #     os.remove(output_file)
-
-    #     for key, val in sampledata.iteritems():
-    #         os.remove("./%s" % key)
-
-    # except Exception:
-    #     pass
-
-    # return 0

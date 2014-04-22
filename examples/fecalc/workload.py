@@ -5,7 +5,7 @@ WORKLOAD = []
 
 # replace the paths with your input file paths on stampede
 
-for tj in range(0, 34):
+for tj in range(0, 2):
 
     task = {
         "runtime" : 60, # minutes per task
