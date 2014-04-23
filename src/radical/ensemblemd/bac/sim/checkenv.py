@@ -23,7 +23,7 @@ def run_checkenv(config):
     allocation = config.ALLOCATION
     resource_params = KERNEL[resource]["params"]
     cores_per_node = resource_params["cores_per_node"]
-    kernelcfg = KERNEL[resource]["kernel"]["mmpbsa"]
+    kernelcfg = KERNEL[resource]["kernel"]["namd"]
 
     ############################################################
     # The pilot description
@@ -41,8 +41,8 @@ def run_checkenv(config):
     task_desc = radical.pilot.ComputeUnitDescription()
     task_desc.environment = kernelcfg["environment"]
     task_desc.executable = "/bin/bash"
-    task_desc.arguments = ["-l", "-c", "\"%s && echo -n MMPBSA path: && which %s && echo -n MMPBSA version: && %s --version\"" % \
-            (kernelcfg["pre_execution"], kernelcfg["executable"], kernelcfg["executable"]) ]
+    task_desc.arguments = ["-l", "-c", "\"%s && echo -n NAMD path: && which %s \"" % \
+            (kernelcfg["pre_execution"], kernelcfg["executable"]) ]
     task_desc.cores = 1
 
     ############################################################
