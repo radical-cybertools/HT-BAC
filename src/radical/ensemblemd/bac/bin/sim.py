@@ -15,7 +15,7 @@ import optparse
 #from radical.ensemblemd.bac.sim import run_benchmark
 #from radical.ensemblemd.bac.sim import run_workload
 from radical.ensemblemd.bac.sim import run_checkenv
-#from radical.ensemblemd.bac.sim import run_testjob
+from radical.ensemblemd.bac.sim import run_testjob
 
 
 # ----------------------------------------------------------------------------

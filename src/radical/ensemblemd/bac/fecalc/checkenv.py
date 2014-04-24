@@ -9,7 +9,7 @@ __copyright__ = "Copyright 2013-2014, The RADICAL Project at Rutgers"
 __license__   = "MIT"
 
 import radical.pilot
-from radical.ensemblemd.bac.common.checkenv import run_checkenv as checkenv
+from radical.ensemblemd.bac.common import run_checkenv as checkenv
 from radical.ensemblemd.bac.kernel import KERNEL
 
 
