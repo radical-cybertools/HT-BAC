@@ -61,8 +61,10 @@ def run_testjob(config, pilot_description, cu_description):
         task = umgr.submit_units(cu_description)
         umgr.wait_units()
 
-        print "\nRESULT:\n"
-        print task.stdout
+        print "\nRESULTS:\n"
+        print "============================================================"
+        print "  * STDOUT: %s" % task.stdout
+        print "  * STDERR: %s" % task.stderr
 
         session.close()
 

@@ -39,11 +39,11 @@ def run_testjob(config):
     # Download the sample data from  server
     sampledata_base_url = config.SAMPLEDATA
     sampledata = {
-        "nmode.5h.py" : "%s/MMBPSA/nmode.5h.py" % sampledata_base_url,
-        "com.top.2"   : "%s/MMBPSA/com.top.2" % sampledata_base_url,
-        "rec.top.2"   : "%s/MMBPSA/rec.top.2" % sampledata_base_url,
-        "lig.top"     : "%s/MMBPSA/lig.top" % sampledata_base_url,
-        "rep1.traj"   : "%s/MMBPSA/trajectories/rep1.traj" % sampledata_base_url
+        "nmode.5h.py" : "%s/BAC-MMBPSA/nmode.5h.py" % sampledata_base_url,
+        "com.top.2"   : "%s/BAC-MMBPSA/com.top.2" % sampledata_base_url,
+        "rec.top.2"   : "%s/BAC-MMBPSA/rec.top.2" % sampledata_base_url,
+        "lig.top"     : "%s/BAC-MMBPSA/lig.top" % sampledata_base_url,
+        "rep1.traj"   : "%s/BAC-MMBPSA/trajectories/rep1.traj" % sampledata_base_url
     }
     try:
         for key, val in sampledata.iteritems():

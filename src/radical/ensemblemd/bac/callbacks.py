@@ -38,4 +38,4 @@ def task_cb(origin, state):
     if state == radical.pilot.FAILED:
         # Print the log entry if task has failed to run
         for entry in origin.log:
-            print "     LOG: %s" % entr
+            print "     LOG: %s" % entry
