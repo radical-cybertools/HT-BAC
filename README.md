@@ -33,7 +33,7 @@ python -c "import radical.ensemblemd.htbac; print radical.ensemblemd.htbac.versi
 >    cd HT-BAC
 >    python setup.py install
 
-# 2. Usage
+## 2. Usage
 
 ## 2.1 Free Energy Calculations (`radical-bac-fecalc`)
 
