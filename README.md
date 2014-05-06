@@ -1,4 +1,4 @@
-# HT-BAC
+# HT-BAC Tools
 
 HT-BAC provides a set of tools for molecular dynamics binding affinity calculations.
 
@@ -92,7 +92,7 @@ MMPBSA version:MMPBSA.py: Version 13.0
 
 ```
 
-#### Run the Sample Workload
+#### Define and Run the Sample Workload
 
 If `--checkenv` has passed, we can safely assume that the execution environment 
 on the remote cluster is at least half-way decent and capable of executing 
@@ -101,81 +101,85 @@ MMPBSA tasks.
 Now we download the data for our sample workload:
 
 ```
-wget http://testing.saga-project.org/cybertools/sampledata/BAC-MMBPSA/mmpbsa-sampledata.tar.gz
-tar xzf mmpbsa-sampledata.tar.gz
+wget http://testing.saga-project.org/cybertools/sampledata/BAC-MMBPSA/mmpbsa-sample-data.tgz
+tar xzf mmpbsa-sample-data.tgz
 ```
 
-
-
-The output should look like this:
-
-```
- * Task MMPBSA-fe-test-task state changed from 'New' to 'TransferringInput'.
- * Task MMPBSA-fe-test-task state changed from 'TransferringInput' to 'WaitingForExecution'.
- * Resource '<_BigJobWorker(_BigJobWorker-9, started daemon)>' state changed from 'New' to 'Pending'.
- * Task MMPBSA-fe-test-task state changed from 'WaitingForExecution' to 'Pending'.
- * Resource '<_BigJobWorker(_BigJobWorker-9, started daemon)>' state changed from 'Pending' to 'Running'.
- * Task MMPBSA-fe-test-task state changed from 'Pending' to 'Running'.
- * Task MMPBSA-fe-test-task state changed from 'Running' to 'WaitingForOutputTransfer'.
- * Task MMPBSA-fe-test-task state changed from 'WaitingForOutputTransfer' to 'TransferringOutput'.
- * Task MMPBSA-fe-test-task state changed from 'TransferringOutput' to 'Done'.
-
-Test task results:
-Loading and checking parameter files for compatibility...
-Preparing trajectories for simulation...
-20 frames were processed by cpptraj for use in calculation.
-
-Running calculations on normal system...
-
-Beginning GB calculations with /opt/apps/intel13/mvapich2_1_9/amber/12.0/bin/mmpbsa_py_energy
-  calculating complex contribution...
-  calculating receptor contribution...
-  calculating ligand contribution...
-
-Beginning PB calculations with /opt/apps/intel13/mvapich2_1_9/amber/12.0/bin/mmpbsa_py_energy
-  calculating complex contribution...
-  calculating receptor contribution...
-  calculating ligand contribution...
-
-Timing:
-Total setup time:                           0.042 min.
-Creating trajectories with cpptraj:         0.030 min.
-Total calculation time:                     8.192 min.
-
-Total GB calculation time:                  1.250 min.
-Total PB calculation time:                  6.942 min.
-
-Statistics calculation & output writing:    0.000 min.
-Total time taken:                           8.274 min.
-
-
-MMPBSA.py Finished! Thank you for using. Please cite us if you publish this work with this paper:
-   Miller III, B. R., McGee Jr., T. D., Swails, J. M. Homeyer, N. Gohlke, H. and Roitberg, A. E.
-   J. Chem. Theory Comput., 2012, 8 (9) pp 3314--3321
-mmpbsa_py_energy found! Using /opt/apps/intel13/mvapich2_1_9/amber/12.0/bin/mmpbsa_py_energy
-cpptraj found! Using /opt/apps/intel13/mvapich2_1_9/amber/12.0/bin/cpptraj
-```
-
-### 2.1.3 Running a Free Energy Calculation Workload
-
-A sample workload file (`examples/bac/workload.py`) is provided in which multiple MMPBSA tasks are defined. A workload is passed to the radical-bac-fecalc.py tool via the --workload= flag. Change the workload in the file to your specific needs:
+Next, we define the workload (we use the same input files for all tasks for simplicity).
+Open a file `workload.py` and put in the following:
 
 ```
 WORKLOAD = []
 
-for tj in range(1, 2):
+for tj in range(0, 32):
 
     task = {
-        "runtime" : 60, # minutes per task
-        "nmode"   : "/home1/00988/tg802352/MMPBSASampleDATA/nmode.5h.py",
-        "com"     : "/home1/00988/tg802352/MMPBSASampleDATA/com.top.2",
-        "rec"     : "/home1/00988/tg802352/MMPBSASampleDATA/rec.top.2",
-        "lig"     : "/home1/00988/tg802352/MMPBSASampleDATA/lig.top",
-        "traj"    : "/home1/00988/tg802352/MMPBSASampleDATA/trajectories/rep%s.traj" % tj,
+      # Runtime of the MMPBSA task.
+        "runtime" : 60,
+        # Number of cores to use for the MMPBSA task.
+        "cores"   : 1
+        # MMPBSA input file.
+        "input"           : "./mmpbsa-sample-data/nmode.5h.py",
+        # Complex topology file
+        "complex_prmtop"  : "./mmpbsa-sample-data/com.top.2",
+        # Receptor topology file
+        "receptor_prmtop" : "./mmpbsa-sample-data/rec.top.2",
+        # Ligand topology file.
+        "ligand_prmtop"   : "./mmpbsa-sample-data/lig.top",
+        # Input trajectories to analyze.
+        "trajectory"      : "./mmpbsa-sample-data/trajectories/rep1.traj", 
+        # Output filename.
+        "output"  : "mmpbsa-task-%s.out" % tj
     }
 
     WORKLOAD.append(task)
 ```
+
+> *Note:* HT-BAC workload files are Python scripts. This means that 
+> you can define arbitrarily complex workload descriptions, as long
+> as all tasks are appened to the global `WORKLOAD` list.
+
+now you are ready to run the workload with the `htbac-fecalc` tool:
+
+```
+htbac-fecalc --config=config.py --workload=workload.py
+```
+
+The workload will take about XX minutes to execute. The output should look like this:
+
+```
+ * Number of tasks: 32
+ * Pilot size (# cores): 32
+ * Pilot runtime: 60
+
+ * Task 53692e00b61585411691fb98 state changed to 'WaitingForInputTransfer'.
+ * Task 53692e00b61585411691fb99 state changed to 'WaitingForInputTransfer'.
+ [...]
+ * Task 53692e00b61585411691fb98 state changed to 'TranferringInput'.
+ * Task 53692e00b61585411691fb99 state changed to 'TranferringInput'.
+ [...]
+ * Task 53692e00b61585411691fb98 state changed to 'TranferringInput'.
+ * Task 53692e00b61585411691fb99 state changed to 'TranferringInput'.
+ [...]
+ * Task 53692e00b61585411691fb98 state changed to 'WaitingForExecution'.
+ * Task 53692e00b61585411691fb99 state changed to 'WaitingForExecution'.
+ [...]
+ * Task 53692e00b61585411691fb98 state changed to 'Executing'.
+ * Task 53692e00b61585411691fb99 state changed to 'Executing'.
+ [...]
+ * Task 53692e00b61585411691fb98 state changed to 'WaitingForOutputTransfer'.
+ * Task 53692e00b61585411691fb99 state changed to 'WaitingForOutputTransfer'.
+  [...]
+ * Task 53692e00b61585411691fb98 state changed to 'TransferringOutput'.
+ * Task 53692e00b61585411691fb99 state changed to 'TransferringOutput'.
+ [...]
+ * Task 53692e00b61585411691fb98 state changed to 'Done'.
+ * Task 53692e00b61585411691fb99 state changed to 'Done'.
+
+```
+
+The output files with the results can be found in the current directory.
+
 
 Once you have defined your workload you can execute it. Due to the potentially long runtime of your workload, it is highly advisable to run the script within a terminal multiplexer, like [tmux](http://robots.thoughtbot.com/a-tmux-crash-course). This allows you to _detach_ from your running script, log out from the lab machine and re-attach to it at a later point in time to check its progress.
 

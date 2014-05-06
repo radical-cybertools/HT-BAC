@@ -68,23 +68,35 @@ def run_workload(config, workload):
     for task in workload:
         tasknum += 1
 
-        input_nmode = task["nmode"]
-        input_com   = task["com"]
-        input_rec   = task["rec"]
-        input_lig   = task["lig"]
-        input_traj  = task["traj"]
+        input_nmode = task["input"]
+        nmode_basen = os.path.basename(input_nmode)
+
+        input_com   = task["complex_prmtop"]
+        com_basen   = os.path.basename(input_com)
+
+        input_rec   = task["receptor_prmtop"]
+        rec_basen   = os.path.basename(input_rec)
+
+        input_lig   = task["ligand_prmtop"]
+        lig_basen   = os.path.basename(input_lig)
+
+        input_traj  = task["trajectory"]
+        traj_basen  = os.path.basename(input_traj)
+
+        output      = task["output"]
 
         mmpbsa_task = radical.pilot.ComputeUnitDescription()
         mmpbsa_task.environment = kernelcfg["environment"]
-        mmpbsa_task.executable = "/bin/bash"
-        mmpbsa_task.arguments = ["-l", "-c", "\"%s && %s -i %s -cp %s -rp %s -lp %s -y %s \"" % \
+        mmpbsa_task.executable  = "/bin/bash"
+        mmpbsa_task.arguments   = ["-l", "-c", "\"%s && %s -i %s -cp %s -rp %s -lp %s -y %s \"" % \
            (kernelcfg["pre_execution"], 
             kernelcfg["executable"], 
-            input_nmode, input_com, input_rec, input_lig, input_traj
-            )]
+            nmode_basen, com_basen, rec_basen, lig_basen, traj_basen)]
 
-        mmpbsa_task.cores = 1
-        mmpbsa_task.output_data = ["FINAL_RESULTS_MMPBSA.dat > traj-%s-FINAL_RESULTS_MMPBSA.dat" % tasknum]
+        mmpbsa_task.cores       = task["cores"]
+
+        mmpbsa_task.input_data  = [input_nmode, input_com, input_rec, input_lig, input_traj]
+        mmpbsa_task.output_data = ["FINAL_RESULTS_MMPBSA.dat > %s" % output]
 
         all_tasks.append(mmpbsa_task)
 
@@ -136,4 +148,5 @@ def run_workload(config, workload):
 
     except Exception, ex:
         print "ERROR: %s" % str(ex)
+        session.close()
         return 1
