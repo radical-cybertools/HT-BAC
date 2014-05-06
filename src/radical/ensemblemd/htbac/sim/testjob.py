@@ -14,9 +14,9 @@ import urllib
 import optparse
 import radical.pilot 
 
-from radical.ensemblemd.bac.common import run_testjob as testjob
-from radical.ensemblemd.bac.callbacks import *
-from radical.ensemblemd.bac.kernel import KERNEL
+from radical.ensemblemd.htbac.common import run_testjob as testjob
+from radical.ensemblemd.htbac.callbacks import *
+from radical.ensemblemd.htbac.kernel import KERNEL
 
 
 # ----------------------------------------------------------------------------
