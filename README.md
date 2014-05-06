@@ -33,56 +33,79 @@ python -c "import radical.ensemblemd.htbac; print radical.ensemblemd.htbac.versi
 >    cd HT-BAC
 >    python setup.py install
 
+
 ## 2. Usage Examples
 
-### 2.1 Free Energy Calculations (`htbac-fecalc`)
+### 2.1 Preparation 
 
-In this example we run a set of 64 free energy calculations using AMBER / [MMPBSA.py](http://pubs.acs.org/doi/abs/10.1021/ct300418h) on the [stampede](https://www.tacc.utexas.edu/stampede/) cluster. For demonstration purposes, the input data for all 32 tasks is identical, but this can obvisouly be changed easily.
+*NOTE:* We will use TACC's [stampede](https://www.tacc.utexas.edu/stampede/) cluster
+for these examples.
 
-#### Configuration
-
-A simple configuration file (`examples/fecalc/config.py`)is provided in which the allocation and resource 
-parameters are set. Configuration files are passed to the `radical-freenerg-run` tool via the `--config=` flag. Change any of the values in the file to your specific needs: 
-
-```
-CONFIG = {
-    "resource"      : "stampede.tacc.utexas.edu",
-    "cores_per_node": 16,
-    "username"      : "tg802352",
-    "allocation"    : "TG-MCB090174"
-}
-```
-
-### 2.1.2 Test Mode
-
-The `radical-bac-fecalc` script provides two 'test modes' (`--checkenv` and `--testjob`) in which only a single task is submitted to the remote cluster to check wether the environment is healthy and usable.  
-
-Before you start running large simulations on a resource, you should run `--checkenv` test mode at least once to ensure that the environment is ok:
+Before your run the examples, please create a new directory, e.g., in your `$HOME` directory
+and copy our sample configuration files into it:
 
 ```
-$> radical-bac-fecalc --config=examples/fecalc/config.py --checkenv
+mkdir $HOME/htbac-examples
+cd $HOME/htback-examples
+wget wget https://raw.githubusercontent.com/radical-cybertools/HT-BAC/release/examples/config.py
+
+```
+
+Next, open `config.py` and change the following lines to match your stampede / TACC account:
+
+```
+USERNAME   = "your_username"               # Your username on the remote machine.
+ALLOCATION = "your_allocation"             # The allocation or project to charge.
+```
+
+> If you don't have `wget` installed, you can just copy and paste the content of the  
+> URL above into a file called `config.py`.
+
+In order for HT-BAC to work, you also need password-less SSH-key access to 
+the remote cluster. Tools like [ssh keychain](http://www.enterprisenetworkingplanet.com/netsecur/article.php/3469681/The-Practically-Ultimate-OpenSSHKeychain-Howto.htm) help with that. *Make sure you 
+can SSH into the remote cluster without being asked for a passord before you proceed*.
+
+### 2.2 Free Energy Calculations (`htbac-fecalc`)
+
+In this example we run a set of 64 free energy calculations using AMBER / [MMPBSA.py](http://pubs.acs.org/doi/abs/10.1021/ct300418h). For demonstration purposes, the input data for all 32 tasks is identical, but this can obvisouly be changed easily.
+
+#### Check the Enironment
+
+Before you start running large simulations on a resource, you should run `htbac-fecalc --checkenv` at least once to ensure that the environment is ok:
+
+```
+htbac-fecalc --config=config.py --checkenv
 ``` 
 
 The output should look like this:
 
 ```
- * Task 53331fa26bf88b22b2662eab state changed to 'PendingExecution'.
- * Resource '53331f9c6bf88b22b2662ea9' state changed to 'Running'.
- * Task 53331fa26bf88b22b2662eab state changed to 'Running'.
- * Task 53331fa26bf88b22b2662eab state changed to 'Done'.
+ * Task 53690d7fb6158537540658cc state changed to 'PendingExecution'.
+ * Resource '53690d77b6158537540658ca' state changed to 'Running'.
+ * Task 53690d7fb6158537540658cc state changed to 'Running'.
+ * Task 53690d7fb6158537540658cc state changed to 'Done'.
 
 RESULT:
 
 MMPBSA path:/opt/apps/intel13/mvapich2_1_9/amber/12.0/bin/MMPBSA.py
 MMPBSA version:MMPBSA.py: Version 13.0
-```
-
-Once `--checkenv` has passed, you can run `--testjob`. In this test mode, a single free energy calculation job is launched together with some [sample input data](http://google.com) that is downloaded and transferred on the fly.  
-
 
 ```
-$> radical-bac-fecalc --config=examples/bac/config.py --testjob
+
+#### Run the Sample Workload
+
+If `--checkenv` has passed, we can safely assume that the execution environment 
+on the remote cluster is at least half-way decent and capable of executing 
+MMPBSA tasks. 
+
+Now we download the data for our sample workload:
+
 ```
+wget http://testing.saga-project.org/cybertools/sampledata/BAC-MMBPSA/mmpbsa-sampledata.tar.gz
+tar xzf mmpbsa-sampledata.tar.gz
+```
+
+
 
 The output should look like this:
 
