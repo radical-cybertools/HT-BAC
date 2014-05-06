@@ -145,7 +145,7 @@ now you are ready to run the workload with the `htbac-fecalc` tool:
 htbac-fecalc --config=config.py --workload=workload.py
 ```
 
-The workload will take about XX minutes to execute. The output should look like this:
+The workload will take about *30 minutes* to execute. The output should look like this:
 
 ```
  * Number of tasks: 32
