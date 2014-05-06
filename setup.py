@@ -17,10 +17,67 @@ import subprocess
 
 from setuptools import setup, find_packages, Command
 
+
+#-----------------------------------------------------------------------------
+#
+def get_version():
+
+    short_version = None  # 0.4.0
+    long_version  = None  # 0.4.0-9-g0684b06
+
+    try:
+        import subprocess as sp
+        import re
+
+        srcroot       = os.path.dirname (os.path.abspath (__file__))
+        VERSION_MATCH = re.compile (r'(([\d\.]+)\D.*)')
+
+        # attempt to get version information from git
+        p   = sp.Popen ('cd %s && git describe --tags --always' % srcroot,
+                        stdout=sp.PIPE, stderr=sp.STDOUT, shell=True)
+        out = p.communicate()[0]
+
+
+        if  p.returncode != 0 or not out :
+
+            # the git check failed -- its likely that we are called from
+            # a tarball, so use ./VERSION instead
+            out=open ("%s/VERSION" % ".", 'r').read().strip()
+
+
+        # from the full string, extract short and long versions
+        v = VERSION_MATCH.search (out)
+        if v:
+            long_version  = v.groups ()[0]
+            short_version = v.groups ()[1]
+
+
+        # sanity check if we got *something*
+        if  not short_version or not long_version :
+            sys.stderr.write ("Cannot determine version from git or ./VERSION\n")
+            import sys
+            sys.exit (-1)
+
+
+        # make sure the version files exist for the runtime version inspection
+        open ('%s/VERSION' % srcroot, 'w').write (long_version+"\n")
+        open ('%s/src/radical/ensemblemd/htbac/VERSION' % srcroot, 'w').write (long_version+"\n")
+
+
+    except Exception as e :
+        print 'Could not extract/set version: %s' % e
+        import sys
+        sys.exit (-1)
+
+    return short_version, long_version
+
+
+short_version, long_version = get_version ()
+
 #-----------------------------------------------------------------------------
 # check python version. we need > 2.5, <3.x
-if  sys.hexversion < 0x02060000 or sys.hexversion >= 0x03000000:
-    raise RuntimeError("HT-BAC requires Python 2.6 or higher")
+if  sys.hexversion < 0x02050000 or sys.hexversion >= 0x03000000:
+    raise RuntimeError("Sinon requires Python 2.x (2.5 or higher)")
 
 #-----------------------------------------------------------------------------
 #
@@ -30,14 +87,14 @@ def read(*rnames):
 #-----------------------------------------------------------------------------
 setup_args = {
     'name'             : 'radical.ensemblemd.htbac',
-    'version'          : (read('VERSION')),
-    'description'      : "HT-BAC is a tool for molecular dynamics binding affinity calculations.",
+    'version'          : short_version,
+    'description'      : "BAC is a tool for molecular dynamics binding affinity calculations.",
     'long_description' : (read('README.md') + '\n\n' + read('CHANGES.md')),
     'author'           : 'RADICAL Group at Rutgers University',
     'author_email'     : 'ole.weidner@rutgers.edu',
     'maintainer'       : "Ole Weidner", 
     'maintainer_email' : 'ole.weidner@rutgers.edu',
-    'url'              : 'https://github.com/radical-cybertools/HT-BAC',
+    'url'              : 'https://github.com/radical-cybertools',
     'license'          : 'MIT',
     'keywords'         : "molecular dynamics binding affinity calculations",
     'classifiers'      :  [
@@ -64,18 +121,17 @@ setup_args = {
              'htbac-nmode  = radical.ensemblemd.htbac.bin.nmode:main']
     },
 
-    'namespace_packages' : ['radical', 'radical.ensemblemd'],
-    'packages'           : find_packages('src'),
-    'package_dir'        : {'': 'src'},  
+    #'dependency_links': ['https://github.com/saga-project/saga-pilot/tarball/master#egg=sagapilot'],
 
-    'data_files'         : [('radical/ensemblemd/htbac', ['VERSION'])],
+    'namespace_packages': ['radical', 'radical.ensemblemd'],
+    'packages'    : find_packages('src'),
+    'package_dir' : {'': 'src'},  
 
-    'install_requires'   : ['radical.pilot'],
+    'package_data'     : {'': ['*.sh', 'VERSION', 'VERSION.git', ]},
+    'install_requires' : ['setuptools>=1',],
 
-    'tests_require'      : ['radical.pilot', 'nose'],
-    'test_suite'         : 'radical.ensemblemd.htbac.tests',
 
-    'zip_safe'           : False,
+    'zip_safe'         : False,
 }
 
 #-----------------------------------------------------------------------------

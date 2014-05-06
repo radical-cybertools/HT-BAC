@@ -1,1 +1,2 @@
-include *.py MANIFEST.in README.md CHANGES.md LICENSE.md VERSION
+include *.py
+global-include MANIFEST.in README.md CHANGES.md LICENSE.md VERSION
