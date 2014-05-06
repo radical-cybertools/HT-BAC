@@ -33,13 +33,13 @@ python -c "import radical.ensemblemd.htbac; print radical.ensemblemd.htbac.versi
 >    cd HT-BAC
 >    python setup.py install
 
-## 2. Usage
+## 2. Usage Examples
 
-## 2.1 Free Energy Calculations (`radical-bac-fecalc`)
+### 2.1 Free Energy Calculations (`htbac-fecalc`)
 
-This example shows how to run a set of free energy calculations using AMBER / [MMPBSA.py](http://pubs.acs.org/doi/abs/10.1021/ct300418h).
+In this example we run a set of 64 free energy calculations using AMBER / [MMPBSA.py](http://pubs.acs.org/doi/abs/10.1021/ct300418h) on the [stampede](https://www.tacc.utexas.edu/stampede/) cluster. For demonstration purposes, the input data for all 32 tasks is identical, but this can obvisouly be changed easily.
 
-### 2.1.1 Configuration
+#### Configuration
 
 A simple configuration file (`examples/fecalc/config.py`)is provided in which the allocation and resource 
 parameters are set. Configuration files are passed to the `radical-freenerg-run` tool via the `--config=` flag. Change any of the values in the file to your specific needs: 
