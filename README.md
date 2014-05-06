@@ -1,16 +1,24 @@
 # HT-BAC
 
-### A High-Throughput Binding Affinity Calculation Tools
+HT-BAC provides a set of tools for molecular dynamics binding affinity calculations.
 
-HT-BAC is a set of tools for molecular dynamics binding affinity calculations.
+## 1. Installation
 
+*Prerequisites*: Python >= 2.6, virtualenv >= 1.11 and pip >= 1.5.
 
-# 1. Installation
+The easiest way to install HT-BAC in user-space is to create 
+a virtual environment:
 
 ```
-git clone https://github.com/radical-cybertools/HT-BAC.git
-cd HT-BAC
-python setup.py install
+virtualenv $HOME/HT-BAC-Tools
+source $HOME/HT-BAC-Tools/bin/activate
+```
+
+The latest version of HT-BAC can be installed directly 
+from GitHub:
+
+```
+pip install -e https://github.com/radical-cybertools/HT-BAC.git@release#egg=HT-BAC
 ```
 
 The following command should return the version number of the tools if the installation was successful:
