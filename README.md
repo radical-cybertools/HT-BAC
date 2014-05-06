@@ -176,35 +176,36 @@ The workload will take about *30 minutes* to execute. The output should look lik
  * Task 53692e00b61585411691fb98 state changed to 'Done'.
  * Task 53692e00b61585411691fb99 state changed to 'Done'.
 
+
+
 ```
 
 The output files with the results can be found in the current directory.
 
+## Tips and Best Practice
 
-Once you have defined your workload you can execute it. Due to the potentially long runtime of your workload, it is highly advisable to run the script within a terminal multiplexer, like [tmux](http://robots.thoughtbot.com/a-tmux-crash-course). This allows you to _detach_ from your running script, log out from the lab machine and re-attach to it at a later point in time to check its progress.
+### Use tmux for Long Running Simulations
 
-> TIP: To start a new tmux session, type
-> 
->     tmux
->    
-> You can *detach* from a running tmux session by pressing `Ctrl-B D` and *re-attach* by launching tmux via `tmux attach`.
+Usually workloads take much longer to execute then the examples above. Some workloads 
+can run for hours or even for days. Hence, it is highly advisable to run the script within a terminal multiplexer, like [tmux](http://robots.thoughtbot.com/a-tmux-crash-course). This allows you to _detach_ from your running script, log out from the lab machine and re-attach to it at a later point in time to check its progress.
+
+To start a new tmux session, type
+``` 
+    tmux
+```
+
+You can *detach* from a running tmux session by pressing `Ctrl-B D` and *re-attach* by launching tmux via `tmux attach`.
 
 In your (new) `tmux` session, active your virtual environment and launch your workload:
 
 ```
-source $HOME/MDStack/bin/activate
+source $HOME/HT-BAC-Tools/bin/activate
 
-radical-bac-fecalc --config=config.py --workload=workload.py
+htbac-fecalc --config=config.py --workload=workload.py
 ```
 
-Now you can detach from your tmux session or simply leave the terminal open. At some point you will see a message similar to this:
-
-```
-DONE -- All trajectories have been processed.
-```
-
-You will find the `FINAL_RESULTS_MMPBSA.dat` files for the individual tasks in the current directory. 
-
+Now you can detach from your tmux session and even log out if you are connected via ssh. Later you 
+can login and / or re-connect to your session again to check the progress of your simulations.
 
 
 

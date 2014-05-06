@@ -127,7 +127,8 @@ def run_workload(config, workload):
         pilot.register_callback(resource_cb)
 
         umgr = radical.pilot.UnitManager(session=session,
-            scheduler=radical.pilot.SCHED_DIRECT_SUBMISSION)
+            scheduler=radical.pilot.SCHED_DIRECT_SUBMISSION,
+            input_transfer_workers=4, output_transfer_workers=4)
         umgr.register_callback(task_cb)
         umgr.add_pilots(pilot)
 
@@ -137,7 +138,8 @@ def run_workload(config, workload):
         print "\nRESULTS:"
 
         for task in tasks:
-            print " * State: %s STDOUT: %s STDERR: %s" % (task.state, task.stdout, task.stderr)
+            print " * Task %s: state: %s, started: %s, finished: %s, results: %s" %\
+                (task.uid, task.state, task.start_time, task.stop_time, task.description.output_data[0].split(" > ")[1])
 
         session.close()
 
