@@ -68,7 +68,7 @@ def run_testjob(config):
     mmpbsa_test_task = radical.pilot.ComputeUnitDescription()
     mmpbsa_test_task.environment = kernelcfg["environment"]
     mmpbsa_test_task.executable = "/bin/bash"
-    mmpbsa_test_task.arguments   = ["-l", "-c", "\"module load namd/2.9 && ibrun namd2 ./eq0.inp \""]
+    mmpbsa_test_task.arguments   = ["-l", "-c", "\"module load namd/2.9 && namd2 ./eq0.inp \""]
     mmpbsa_test_task.cores = 1
     mmpbsa_test_task.input_data = ["/%s/complex.pdb" % os.getcwd(),
                                    "/%s/complex.top" % os.getcwd(),
