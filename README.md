@@ -46,7 +46,7 @@ and copy our sample configuration files into it:
 
 ```
 mkdir $HOME/htbac-examples
-cd $HOME/htback-examples
+cd $HOME/htbac-examples
 wget wget https://raw.githubusercontent.com/radical-cybertools/HT-BAC/release/examples/config.py
 
 ```
