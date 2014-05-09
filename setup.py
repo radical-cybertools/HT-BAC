@@ -130,7 +130,7 @@ setup_args = {
                            'radical.ensemblemd.htbac.tests', 
                            'radical.ensemblemd.htbac.sim', 
                            'radical.ensemblemd.htbac.common',
-                           'radical.ensemblemd.htbac.bin']
+                           'radical.ensemblemd.htbac.bin'],
     'package_dir' :       {'': 'src'},  
 
     'package_data'     :  {'': ['*.sh', 'VERSION', 'VERSION.git']},
