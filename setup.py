@@ -117,14 +117,13 @@ setup_args = {
     'entry_points': {
         'console_scripts': 
             ['htbac-fecalc = radical.ensemblemd.htbac.bin.fecalc:main',
-             'htbac-sim    = radical.ensemblemd.htbac.bin.sim:main',
-             'htbac-nmode  = radical.ensemblemd.htbac.bin.nmode:main']
+             'htbac-sim    = radical.ensemblemd.htbac.bin.sim:main']
     },
 
     #'dependency_links': ['https://github.com/saga-project/saga-pilot/tarball/master#egg=sagapilot'],
 
     'namespace_packages': ['radical', 'radical.ensemblemd'],
-    'packages'    : find_packages('src'),
+    'packages'    : find_packages('src'), 
     'package_dir' : {'': 'src'},  
 
     'package_data'     : {'': ['*.sh', 'VERSION', 'VERSION.git', ]},
@@ -133,6 +132,9 @@ setup_args = {
 
     'zip_safe'         : False,
 }
+
+print "======="
+print find_packages('src')
 
 #-----------------------------------------------------------------------------
 
