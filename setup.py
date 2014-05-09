@@ -123,18 +123,21 @@ setup_args = {
     #'dependency_links': ['https://github.com/saga-project/saga-pilot/tarball/master#egg=sagapilot'],
 
     'namespace_packages': ['radical', 'radical.ensemblemd'],
-    'packages'    : find_packages('src'), 
-    'package_dir' : {'': 'src'},  
+    'packages'    :       ['radical', 
+                           'radical.ensemblemd', 
+                           'radical.ensemblemd.htbac', 
+                           'radical.ensemblemd.htbac.fecalc', 
+                           'radical.ensemblemd.htbac.tests', 
+                           'radical.ensemblemd.htbac.sim', 
+                           'radical.ensemblemd.htbac.common',
+                           'radical.ensemblemd.htbac.bin']
+    'package_dir' :       {'': 'src'},  
 
-    'package_data'     : {'': ['*.sh', 'VERSION', 'VERSION.git', ]},
-    'install_requires' : ['radical.pilot', 'setuptools>=1',],
-
+    'package_data'     :  {'': ['*.sh', 'VERSION', 'VERSION.git']},
+    'install_requires' :  ['radical.pilot', 'setuptools>=1'],
 
     'zip_safe'         : False,
 }
-
-print "======="
-print find_packages('src')
 
 #-----------------------------------------------------------------------------
 

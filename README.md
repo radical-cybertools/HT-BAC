@@ -18,10 +18,16 @@ The latest version of HT-BAC can be installed directly
 from GitHub:
 
 ```
-    git clone https://github.com/radical-cybertools/HT-BAC.git -b release HT-BAC-src
-    cd HT-BAC-src
-    python setup.py install
+pip install -e git://github.com/radical-cybertools/HT-BAC.git@master#egg=radical.ensemblemd.htbac
 ```
+
+> If the above command doesn't work, you can check out the repository manually and install HT-BAC from source:
+> 
+> ```
+>     git clone https://github.com/radical-cybertools/HT-BAC.git -b release HT-BAC-src
+>     cd HT-BAC-src
+>     pip install .
+> ```
 
 The following command should return the version number of the tools if the installation was successful:
 
