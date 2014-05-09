@@ -69,11 +69,14 @@ can SSH into the remote cluster without being asked for a passord before you pro
 
 ### 2.2 Free Energy Calculations (`htbac-fecalc`)
 
-In this example we run a set of 64 free energy calculations using AMBER / [MMPBSA.py](http://pubs.acs.org/doi/abs/10.1021/ct300418h). For demonstration purposes, the input data for all 32 tasks is identical, but this can obvisouly be changed easily.
+In this example we run a set of 8 free energy calculations using AMBER / [MMPBSA.py](http://pubs.acs.org/doi/abs/10.1021/ct300418h). For demonstration purposes, the input data for all 8 tasks is identical, but this can obvisouly be changed easily.
 
 #### Check the Enironment
 
 Before you start running large simulations on a resource, you should run `htbac-fecalc --checkenv` at least once to ensure that the environment is ok:
+
+> To see some additional information about task execution, you can set
+> the environment variable `RADICAL_PILOT_VERBOSE=info`.
 
 ```
 htbac-fecalc --config=config.py --checkenv
@@ -113,13 +116,13 @@ Open a file `workload.py` and put in the following:
 ```
 WORKLOAD = []
 
-for tj in range(0, 32):
+for tj in range(0, 8):
 
     task = {
       # Runtime of the MMPBSA task.
         "runtime" : 60,
         # Number of cores to use for the MMPBSA task.
-        "cores"   : 1
+        "cores"   : 1,
         # MMPBSA input file.
         "input"           : "./mmpbsa-sample-data/nmode.5h.py",
         # Complex topology file
@@ -150,8 +153,8 @@ htbac-fecalc --config=config.py --workload=workload.py
 The workload will take about *30 minutes* to execute. The output should look like this:
 
 ```
- * Number of tasks: 32
- * Pilot size (# cores): 32
+ * Number of tasks: 8
+ * Pilot size (# cores): 16
  * Pilot runtime: 60
 
  * Task 53692e00b61585411691fb98 state changed to 'WaitingForInputTransfer'.
@@ -178,13 +181,13 @@ The workload will take about *30 minutes* to execute. The output should look lik
  * Task 53692e00b61585411691fb98 state changed to 'Done'.
  * Task 53692e00b61585411691fb99 state changed to 'Done'.
 
-
-
+ * Task 53692e00b61585411691fb98: state: Done, started: 2014-05-09 18:17:19.333000, finished: 2014-05-09 18:26:36.553000, results: mmpbsa-task-0.out
+ * Task 53692e00b61585411691fb99: state: Done, started: 2014-05-09 18:17:20.385000, finished: 2014-05-09 18:26:32.193000, results: mmpbsa-task-1.out
 ```
 
 The output files with the results can be found in the current directory.
 
-## Tips and Best Practice
+## 3. Tips and Best Practice
 
 ### Use tmux for Long Running Simulations
 

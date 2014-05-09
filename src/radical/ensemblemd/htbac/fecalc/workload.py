@@ -128,7 +128,7 @@ def run_workload(config, workload):
 
         umgr = radical.pilot.UnitManager(session=session,
             scheduler=radical.pilot.SCHED_DIRECT_SUBMISSION,
-            input_transfer_workers=1, output_transfer_workers=1)
+            input_transfer_workers=4, output_transfer_workers=1)
         umgr.register_callback(task_cb)
         umgr.add_pilots(pilot)
 
