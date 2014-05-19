@@ -69,8 +69,8 @@ def run_testjob(config):
     mmpbsa_test_task = radical.pilot.ComputeUnitDescription()
     mmpbsa_test_task.environment = kernelcfg["environment"]
     mmpbsa_test_task.executable = "/bin/bash"
-    mmpbsa_test_task.arguments   = ["-l", "-c", "%s -i nmode.5h.py -cp com.top.2 -rp rec.top.2 -lp lig.top -y rep1.traj \"" % \
-        (kernelcfg["executable"])]
+    mmpbsa_test_task.arguments   = ["-l", "-c", "\"%s && %s -i nmode.5h.py -cp com.top.2 -rp rec.top.2 -lp lig.top -y rep1.traj \"" % \
+        (kernelcfg["pre_execution"], kernelcfg["executable"])]
     mmpbsa_test_task.cores = 1
     mmpbsa_test_task.input_data = ["/%s/nmode.5h.py" % os.getcwd(),
                                    "/%s/com.top.2" % os.getcwd(),
