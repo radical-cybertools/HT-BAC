@@ -42,7 +42,7 @@ python -c "import radical.ensemblemd.htbac; print radical.ensemblemd.htbac.versi
 
 **NOTE:** We will use TACC's [stampede](https://www.tacc.utexas.edu/stampede/) cluster
 to run the example jobs. Since the HT-BAC tools can submit computational tasks to
-a remote machines, all the steps outlined below are done on a 'local' resource, e.g.,
+a remote machine, all steps in this example should be done on a 'local' resource, e.g.,
 your laptop. It is not neccessary to log in to stampede. 
 
 Before your run the examples, please create a new directory, e.g., in your `$HOME` directory
