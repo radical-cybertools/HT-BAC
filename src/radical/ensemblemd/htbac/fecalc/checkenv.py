@@ -33,7 +33,7 @@ def run_checkenv(config):
     pdesc.runtime    = 15 # minutes
     pdesc.cores      = int(cores_per_node) * 1 # one node 
     pdesc.project    = allocation
-    pdesc.cleanup    = True
+    pdesc.cleanup    = False
 
     ############################################################
     # The checkenv task
