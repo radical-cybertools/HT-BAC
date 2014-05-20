@@ -88,8 +88,8 @@ def run_workload(config, workload):
         mmpbsa_task = radical.pilot.ComputeUnitDescription()
         mmpbsa_task.environment = kernelcfg["environment"]
         mmpbsa_task.executable  = "/bin/bash"
-        mmpbsa_task.arguments   = ["-l", "-c", "\"%s -i %s -cp %s -rp %s -lp %s -y %s \"" % \
-           (kernelcfg["executable"], nmode_basen, com_basen, rec_basen, lig_basen, traj_basen)]
+        mmpbsa_task.arguments   = ["-l", "-c", "\"%s && %s -i %s -cp %s -rp %s -lp %s -y %s \"" % \
+           (kernelcfg["pre_execution"], kernelcfg["executable"], nmode_basen, com_basen, rec_basen, lig_basen, traj_basen)]
 
         mmpbsa_task.cores       = task["cores"]
 
