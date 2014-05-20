@@ -73,7 +73,7 @@ can SSH into the remote cluster without being asked for a passord before you pro
 
 In this example we run a set of 8 free energy calculations using AMBER / [MMPBSA.py](http://pubs.acs.org/doi/abs/10.1021/ct300418h). For demonstration purposes, the input data for all 8 tasks is identical, but this can obvisouly be changed easily.
 
-#### Check the Enironment
+#### Check the Environment
 
 Before you start running large simulations on a resource, you should run `htbac-fecalc --checkenv` at least once to ensure that the environment is ok:
 
