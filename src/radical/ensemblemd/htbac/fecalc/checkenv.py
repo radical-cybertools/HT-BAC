@@ -11,7 +11,6 @@ __license__   = "MIT"
 import radical.pilot
 from radical.ensemblemd.mdkernels import MDTaskDescription
 from radical.ensemblemd.htbac.common import run_checkenv as checkenv
-from radical.ensemblemd.htbac.kernel import KERNEL
 
 
 # -----------------------------------------------
@@ -21,12 +20,7 @@ def run_checkenv(config):
     AMBER version, etc.
     """
     resource = config.RESOURCE
-    allocation = config.ALLOCATION
-    resource_params = KERNEL[resource]["params"]
-    
-    cores_per_node = resource_params["cores_per_node"]
-    
-    kernelcfg = KERNEL[resource]["kernel"]["mmpbsa"]
+    allocation = config.ALLOCATION    
 
     ############################################################
     # The pilot description
@@ -34,7 +28,7 @@ def run_checkenv(config):
     pdesc = radical.pilot.ComputePilotDescription()
     pdesc.resource   = resource
     pdesc.runtime    = 15 # minutes
-    pdesc.cores      = int(cores_per_node) * 1 # one node 
+    pdesc.cores      = 4 
     pdesc.project    = allocation
     pdesc.cleanup    = False
 
@@ -54,8 +48,6 @@ def run_checkenv(config):
     task_desc.arguments   = mdtd_bound.arguments
     task_desc.mpi         = mdtd_bound.mpi
     task_desc.cores       = 4
-
-    print task_desc
 
     ############################################################
     # Call the checkenv script

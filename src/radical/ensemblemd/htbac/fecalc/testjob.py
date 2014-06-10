@@ -14,9 +14,8 @@ import urllib
 import optparse
 import radical.pilot 
 
+from radical.ensemblemd.mdkernels import MDTaskDescription
 from radical.ensemblemd.htbac.common import run_testjob as testjob
-from radical.ensemblemd.htbac.callbacks import *
-from radical.ensemblemd.htbac.kernel import KERNEL
 
 
 # ----------------------------------------------------------------------------
@@ -24,16 +23,9 @@ from radical.ensemblemd.htbac.kernel import KERNEL
 def run_testjob(config):
     """Runs a single FE test job.
     """
-    server = config.SERVER
-    dbname = config.DBNAME
-    rconfs = config.RCONFS
-    maxcpus = config.MAXCPUS
     resource = config.RESOURCE
     username = config.USERNAME
     allocation = config.ALLOCATION
-    resource_params = KERNEL[resource]["params"]
-    cores_per_node = resource_params["cores_per_node"]
-    kernelcfg = KERNEL[resource]["kernel"]["mmpbsa"]
 
     # --------------------------------------------------
     # Download the sample data from  server
@@ -58,25 +50,32 @@ def run_testjob(config):
     pdesc = radical.pilot.ComputePilotDescription()
     pdesc.resource   = resource
     pdesc.runtime    = 15 # minutes
-    pdesc.cores      = int(cores_per_node) * 1 # one node
+    pdesc.cores      = 4
     pdesc.project    = allocation
     pdesc.cleanup    = True
 
     # --------------------------------------------------
     # The test task description.
-    output_file = "./MMPBSA-test-task-%s" % str(uuid.uuid4())
+
+    mdtd = MDTaskDescription()
+    mdtd.kernel = "MMPBSA"
+    mdtd.arguments = "-i nmode.5h.py -cp com.top.2 -rp rec.top.2 -lp lig.top -y rep1.traj"
+
+    mdtd_bound = mdtd.bind(resource=resource)
 
     mmpbsa_test_task = radical.pilot.ComputeUnitDescription()
-    mmpbsa_test_task.environment = kernelcfg["environment"]
-    mmpbsa_test_task.executable = "/bin/bash"
-    mmpbsa_test_task.arguments   = ["-l", "-c", "\"%s && %s -i nmode.5h.py -cp com.top.2 -rp rec.top.2 -lp lig.top -y rep1.traj \"" % \
-        (kernelcfg["pre_execution"], kernelcfg["executable"])]
-    mmpbsa_test_task.cores = 1
-    mmpbsa_test_task.input_data = ["/%s/nmode.5h.py" % os.getcwd(),
-                                   "/%s/com.top.2" % os.getcwd(),
-                                   "/%s/rec.top.2" % os.getcwd(),
-                                   "/%s/lig.top" % os.getcwd(),
-                                   "/%s/rep1.traj" % os.getcwd()]
+    mmpbsa_test_task.environment = mdtd_bound.environment 
+    mmpbsa_test_task.pre_exec    = mdtd_bound.pre_exec
+    mmpbsa_test_task.executable  = mdtd_bound.executable
+    mmpbsa_test_task.arguments   = mdtd_bound.arguments
+    mmpbsa_test_task.mpi         = mdtd_bound.mpi
+    mmpbsa_test_task.cores       = 4
+
+    mmpbsa_test_task.input_data  = ["/%s/nmode.5h.py" % os.getcwd(),
+                                    "/%s/com.top.2" % os.getcwd(),
+                                    "/%s/rec.top.2" % os.getcwd(),
+                                    "/%s/lig.top" % os.getcwd(),
+                                    "/%s/rep1.traj" % os.getcwd()]
 
     # --------------------------------------------------
     # RUN THE TEST JOB VIA RADICAL-PILOT

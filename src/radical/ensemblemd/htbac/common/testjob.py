@@ -47,8 +47,7 @@ def run_testjob(config, pilot_description, cu_description):
 
         ############################################################
         # The resource allocation
-        pmgr = radical.pilot.PilotManager(
-            session=session, resource_configurations=rconfs)
+        pmgr = radical.pilot.PilotManager(session=session)
         pmgr.register_callback(resource_cb)
 
         pilot = pmgr.submit_pilots(pilot_description)
