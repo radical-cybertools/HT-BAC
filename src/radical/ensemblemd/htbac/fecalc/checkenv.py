@@ -9,6 +9,7 @@ __copyright__ = "Copyright 2013-2014, The RADICAL Project at Rutgers"
 __license__   = "MIT"
 
 import radical.pilot
+from radical.ensemblemd.mdkernels import MDTaskDescription
 from radical.ensemblemd.htbac.common import run_checkenv as checkenv
 from radical.ensemblemd.htbac.kernel import KERNEL
 
@@ -22,7 +23,9 @@ def run_checkenv(config):
     resource = config.RESOURCE
     allocation = config.ALLOCATION
     resource_params = KERNEL[resource]["params"]
+    
     cores_per_node = resource_params["cores_per_node"]
+    
     kernelcfg = KERNEL[resource]["kernel"]["mmpbsa"]
 
     ############################################################
@@ -38,12 +41,20 @@ def run_checkenv(config):
     ############################################################
     # The checkenv task
     #
+    mdtd = MDTaskDescription()
+    mdtd.kernel = "MMPBSA"
+    mdtd.arguments = "--version"
+
+    mdtd_bound = mdtd.bind(resource=resource)
+
     task_desc = radical.pilot.ComputeUnitDescription()
-    task_desc.environment = kernelcfg["environment"]
-    task_desc.executable = "/bin/bash"
-    task_desc.arguments = ["-l", "-c", "\"%s && echo -n MMPBSA path: && which %s && echo -n MMPBSA version: && %s --version\"" % \
-            (kernelcfg["pre_execution"], kernelcfg["executable"], kernelcfg["executable"]) ]
-    task_desc.cores = 1
+    task_desc.environment = mdtd_bound.environment  # kernelcfg["environment"]
+    task_desc.pre_exec    = mdtd_bound.pre_exec   # "/bin/bash"
+    task_desc.executable  = mdtd_bound.executable   # "/bin/bash"
+    task_desc.arguments   = mdtd_bound.arguments    # ["-l", "-c", "\"%s && echo -n MMPBSA path: && which %s && echo -n MMPBSA version: && %s --version\"" % \
+    task_desc.cores       = 1
+
+
 
     ############################################################
     # Call the checkenv script
