@@ -116,8 +116,8 @@ setup_args = {
 
     'entry_points': {
         'console_scripts': 
-            ['htbac-fecalc = radical.ensemblemd.htbac.bin.fecalc:main',
-             'htbac-sim    = radical.ensemblemd.htbac.bin.sim:main']
+            ['htbac-fecalc   = radical.ensemblemd.htbac.bin.fecalc:main',
+             'htbac-simchain = radical.ensemblemd.htbac.bin.simchain:main']
     },
 
     #'dependency_links': ['https://github.com/saga-project/saga-pilot/tarball/master#egg=sagapilot'],
@@ -128,7 +128,7 @@ setup_args = {
                            'radical.ensemblemd.htbac', 
                            'radical.ensemblemd.htbac.fecalc', 
                            'radical.ensemblemd.htbac.tests', 
-                           'radical.ensemblemd.htbac.sim', 
+                           'radical.ensemblemd.htbac.simchain', 
                            'radical.ensemblemd.htbac.common',
                            'radical.ensemblemd.htbac.bin'],
     'package_dir' :       {'': 'src'},  
