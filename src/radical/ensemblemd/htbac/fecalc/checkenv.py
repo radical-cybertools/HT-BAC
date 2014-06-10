@@ -48,13 +48,14 @@ def run_checkenv(config):
     mdtd_bound = mdtd.bind(resource=resource)
 
     task_desc = radical.pilot.ComputeUnitDescription()
-    task_desc.environment = mdtd_bound.environment  # kernelcfg["environment"]
-    task_desc.pre_exec    = mdtd_bound.pre_exec   # "/bin/bash"
-    task_desc.executable  = mdtd_bound.executable   # "/bin/bash"
-    task_desc.arguments   = mdtd_bound.arguments    # ["-l", "-c", "\"%s && echo -n MMPBSA path: && which %s && echo -n MMPBSA version: && %s --version\"" % \
-    task_desc.cores       = 1
+    task_desc.environment = mdtd_bound.environment 
+    task_desc.pre_exec    = mdtd_bound.pre_exec
+    task_desc.executable  = mdtd_bound.executable
+    task_desc.arguments   = mdtd_bound.arguments
+    task_desc.mpi         = mdtd_bound.mpi
+    task_desc.cores       = 4
 
-
+    print task_desc
 
     ############################################################
     # Call the checkenv script
