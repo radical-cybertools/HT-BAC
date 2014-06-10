@@ -8,10 +8,8 @@ __email__     = "ole.weidner@rutgers.edu"
 __copyright__ = "Copyright 2013-2014, The RADICAL Project at Rutgers"
 __license__   = "MIT"
 
-import imp
-import os, sys, uuid
+import os
 import urllib
-import optparse
 import radical.pilot 
 
 from radical.ensemblemd.mdkernels import MDTaskDescription

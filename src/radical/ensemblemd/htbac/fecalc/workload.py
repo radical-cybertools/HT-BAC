@@ -14,8 +14,8 @@ import urllib
 import optparse
 import radical.pilot 
 
+from radical.ensemblemd.mdkernels import MDTaskDescription
 from radical.ensemblemd.htbac.callbacks import *
-from radical.ensemblemd.htbac.kernel import KERNEL
 
 
 # ----------------------------------------------------------------------------
@@ -23,21 +23,13 @@ from radical.ensemblemd.htbac.kernel import KERNEL
 def run_workload(config, workload):
     # """Runs a workload.
     # """
-    server = config.SERVER
-    dbname = config.DBNAME
-    rconfs = config.RCONFS
-
-    maxcpus = config.MAXCPUS
-
-    maxcpus = config.MAXCPUS
-    resource = config.RESOURCE
-    username = config.USERNAME
+    server     = config.SERVER
+    dbname     = config.DBNAME
+    rconfs     = config.RCONFS
+    maxcpus    = config.MAXCPUS
+    resource   = config.RESOURCE
+    username   = config.USERNAME
     allocation = config.ALLOCATION
-
-    resource_params = KERNEL[resource]["params"]
-    cores_per_node = resource_params["cores_per_node"]
-
-    kernelcfg = KERNEL[resource]["kernel"]["mmpbsa"]
 
     # We cannot allocate more than "maxcpus". If the number of tasks is 
     # smaller than 'maxcpus', we chose the closest increment of 16. If it
@@ -85,12 +77,18 @@ def run_workload(config, workload):
 
         output      = task["output"]
 
-        mmpbsa_task = radical.pilot.ComputeUnitDescription()
-        mmpbsa_task.environment = kernelcfg["environment"]
-        mmpbsa_task.executable  = "/bin/bash"
-        mmpbsa_task.arguments   = ["-l", "-c", "\"%s && %s -i %s -cp %s -rp %s -lp %s -y %s \"" % \
-           (kernelcfg["pre_execution"], kernelcfg["executable"], nmode_basen, com_basen, rec_basen, lig_basen, traj_basen)]
+        mdtd = MDTaskDescription()
+        mdtd.kernel = "MMPBSA"
+        mdtd.arguments = "-i {0} -cp {1} -rp {2} -lp {3} -y {4}".format(nmode_basen, com_basen, rec_basen, lig_basen, traj_basen)
 
+        mdtd_bound = mdtd.bind(resource=resource)
+
+        mmpbsa_task = radical.pilot.ComputeUnitDescription()
+        mmpbsa_task.environment = mdtd_bound.environment 
+        mmpbsa_task.pre_exec    = mdtd_bound.pre_exec
+        mmpbsa_task.executable  = mdtd_bound.executable
+        mmpbsa_task.arguments   = mdtd_bound.arguments
+        mmpbsa_task.mpi         = mdtd_bound.mpi
         mmpbsa_task.cores       = task["cores"]
 
         mmpbsa_task.input_data  = [input_nmode, input_com, input_rec, input_lig, input_traj]
@@ -110,8 +108,7 @@ def run_workload(config, workload):
 
         ############################################################
         # The resource allocation
-        pmgr = radical.pilot.PilotManager(
-            session=session, resource_configurations=rconfs)
+        pmgr = radical.pilot.PilotManager(session=session)
         pmgr.register_callback(resource_cb)
 
         pdesc = radical.pilot.ComputePilotDescription()

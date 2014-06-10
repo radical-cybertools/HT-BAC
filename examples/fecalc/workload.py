@@ -7,13 +7,14 @@
 
 WORKLOAD = []
 
+# We define 32 tasks -- for practical purposes, they are all the same.
 for tj in range(0, 32):
 
     task = {
     	# Runtime of the MMPBSA task.
         "runtime" : 60,
         # Number of cores to use for the MMPBSA task.
-        "cores"   : 1,
+        "cores"   : 4,
         # MMPBSA input file.
         "input"           : "./mmpbsa-sample-data/nmode.5h.py",
         # Complex topology file
