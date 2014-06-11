@@ -45,7 +45,7 @@ def run_checkenv(config):
     task_desc.executable  = mdtd_bound.executable
     task_desc.arguments   = mdtd_bound.arguments
     task_desc.mpi         = mdtd_bound.mpi
-    task_desc.cores       = 4
+    task_desc.cores       = 1 # --version can only run on one core. hangs otherwise.
 
     ############################################################
     # Call the batch runner
