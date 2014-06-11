@@ -13,7 +13,7 @@ import urllib
 import radical.pilot 
 
 from radical.ensemblemd.mdkernels import MDTaskDescription
-from radical.ensemblemd.htbac.common import batchrunner
+from radical.ensemblemd.htbac.common import BatchRunner
 
 
 # -----------------------------------------------------------------------------
@@ -77,10 +77,13 @@ def run_testjob(config):
 
     ############################################################
     # Call the batch runner
-    return batchrunner(
-        config=config,
-        pilot_description=pdesc,
-        cu_description=mmpbsa_test_task)
+    br = BatchRunner(config=config)
+    finished_units = br.run(pilot_description=pdesc, cu_descriptions=mmpbsa_test_task)
+
+    print "\nRESULT:\n"
+    print finished_units.stdout
+
+    br.close()
 
     ############################################################
     # Try to remove the sample input data - silently fail on error.
@@ -89,5 +92,3 @@ def run_testjob(config):
             os.remove("./%s" % key)
     except Exception:
         pass
-
-    return result
