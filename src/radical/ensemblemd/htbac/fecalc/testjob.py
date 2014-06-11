@@ -13,10 +13,10 @@ import urllib
 import radical.pilot 
 
 from radical.ensemblemd.mdkernels import MDTaskDescription
-from radical.ensemblemd.htbac.common import run_testjob as testjob
+from radical.ensemblemd.htbac.common import batchrunner
 
 
-# ----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 def run_testjob(config):
     """Runs a single FE test job.
@@ -25,8 +25,8 @@ def run_testjob(config):
     username = config.USERNAME
     allocation = config.ALLOCATION
 
-    # --------------------------------------------------
-    # Download the sample data from  server
+    ############################################################
+    # Download the sample data from server
     sampledata_base_url = config.SAMPLEDATA
     sampledata = {
         "nmode.5h.py" : "%s/BAC-MMBPSA/nmode.5h.py" % sampledata_base_url,
@@ -43,7 +43,7 @@ def run_testjob(config):
         print "ERROR - Couldn't download sample data: %s" % str(ex)
         return 1
 
-    # --------------------------------------------------
+    ############################################################
     # The pilot description.
     pdesc = radical.pilot.ComputePilotDescription()
     pdesc.resource   = resource
@@ -52,7 +52,7 @@ def run_testjob(config):
     pdesc.project    = allocation
     pdesc.cleanup    = True
 
-    # --------------------------------------------------
+    ############################################################
     # The test task description.
 
     mdtd = MDTaskDescription()
@@ -75,14 +75,14 @@ def run_testjob(config):
                                     "/%s/lig.top" % os.getcwd(),
                                     "/%s/rep1.traj" % os.getcwd()]
 
-    # --------------------------------------------------
-    # RUN THE TEST JOB VIA RADICAL-PILOT
-    result = testjob(
+    ############################################################
+    # Call the batch runner
+    return batchrunner(
         config=config,
         pilot_description=pdesc,
         cu_description=mmpbsa_test_task)
 
-    # --------------------------------------------------
+    ############################################################
     # Try to remove the sample input data - silently fail on error.
     try:
         for key, val in sampledata.iteritems():

@@ -14,9 +14,7 @@ MAXCPUS    = 1024                         # Maximum number of CPUs to allocate.
 # server or different / additional resource configuration files.
 #
 SERVER     = "mongodb://ec2-184-72-89-141.compute-1.amazonaws.com:27017"
-DBNAME     = "radical-ht-bac"
-RCONFS     = ["https://raw.github.com/radical-cybertools/radical.pilot/master/configs/xsede.json",
-              "https://raw.github.com/radical-cybertools/radical.pilot/master/configs/futuregrid.json"]
+DBNAME     = "radical-ensemblemd"
 
 #------------------------------------------------------------------------------
 # SAMPLEDATA points to the sample data location that is used for the

@@ -10,10 +10,10 @@ __license__   = "MIT"
 
 import radical.pilot
 from radical.ensemblemd.mdkernels import MDTaskDescription
-from radical.ensemblemd.htbac.common import run_checkenv as checkenv
+from radical.ensemblemd.htbac.common import BatchRunner
 
 
-# -----------------------------------------------
+# -----------------------------------------------------------------------------
 #
 def run_checkenv(config):
     """Runs a simple job that performs some sanity tests, determines
@@ -24,7 +24,6 @@ def run_checkenv(config):
 
     ############################################################
     # The pilot description
-    #
     pdesc = radical.pilot.ComputePilotDescription()
     pdesc.resource   = resource
     pdesc.runtime    = 15 # minutes
@@ -34,15 +33,14 @@ def run_checkenv(config):
 
     ############################################################
     # The checkenv task
-    #
     mdtd = MDTaskDescription()
     mdtd.kernel = "MMPBSA"
-    mdtd.arguments = "--version"
+    mdtd.arguments = ["--version"]
 
     mdtd_bound = mdtd.bind(resource=resource)
 
     task_desc = radical.pilot.ComputeUnitDescription()
-    task_desc.environment = mdtd_bound.environment 
+    task_desc.environment = mdtd_bound.environment
     task_desc.pre_exec    = mdtd_bound.pre_exec
     task_desc.executable  = mdtd_bound.executable
     task_desc.arguments   = mdtd_bound.arguments
@@ -50,10 +48,11 @@ def run_checkenv(config):
     task_desc.cores       = 4
 
     ############################################################
-    # Call the checkenv script
-    #
-    return checkenv(
-        config=config,
-        pilot_description=pdesc,
-        cu_description=task_desc
-    )
+    # Call the batch runner
+    br = BatchRunner(config=config)
+    finished_units = br.run(pilot_description=pdesc, cu_descriptions=task_desc)
+
+    print "\nRESULT:\n"
+    print finished_units.stdout
+
+    br.close()

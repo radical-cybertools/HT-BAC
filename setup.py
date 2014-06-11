@@ -120,7 +120,9 @@ setup_args = {
              'htbac-simchain = radical.ensemblemd.htbac.bin.simchain:main']
     },
 
-    #'dependency_links': ['https://github.com/saga-project/saga-pilot/tarball/master#egg=sagapilot'],
+    'dependency_links': [
+      'git+ssh://git@github.com/radical-cybertools/radical.ensemblemd.mdkernels.git@release#egg=radical.ensemblemd.mdkernels'
+     ],
 
     'namespace_packages': ['radical', 'radical.ensemblemd'],
     'packages'    :       ['radical', 
@@ -134,7 +136,7 @@ setup_args = {
     'package_dir' :       {'': 'src'},  
 
     'package_data'     :  {'': ['*.sh', 'VERSION', 'VERSION.git']},
-    'install_requires' :  ['radical.pilot', 'setuptools>=1'],
+    'install_requires' :  ['radical.pilot', 'radical.ensemblemd.mdkernels', 'setuptools>=1'],
 
     'zip_safe'         : False,
 }
