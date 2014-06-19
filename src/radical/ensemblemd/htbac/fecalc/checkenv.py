@@ -12,7 +12,6 @@ import radical.pilot
 from radical.ensemblemd.mdkernels import MDTaskDescription
 from radical.ensemblemd.htbac.common import BatchRunner
 
-
 # -----------------------------------------------------------------------------
 #
 def run_checkenv(config):
@@ -45,7 +44,7 @@ def run_checkenv(config):
     task_desc.executable  = mdtd_bound.executable
     task_desc.arguments   = mdtd_bound.arguments
     task_desc.mpi         = mdtd_bound.mpi
-    task_desc.cores       = 1 # --version can only run on one core. hangs otherwise.
+    task_desc.cores       = 1 # --version can only run on one core. hangs otherwise.g
 
     ############################################################
     # Call the batch runner

@@ -15,8 +15,7 @@ import optparse
 import radical.pilot 
 
 from radical.ensemblemd.mdkernels import MDTaskDescription
-from radical.ensemblemd.htbac.callbacks import *
-
+from radical.ensemblemd.htbac.common import BatchRunner
 
 # ----------------------------------------------------------------------------
 #
@@ -25,7 +24,6 @@ def run_workload(config, workload):
     # """
     server     = config.SERVER
     dbname     = config.DBNAME
-    rconfs     = config.RCONFS
     maxcpus    = config.MAXCPUS
     resource   = config.RESOURCE
     username   = config.USERNAME
@@ -53,6 +51,19 @@ def run_workload(config, workload):
     print " * Pilot size (# cores): %s" % pilot_size
     print " * Pilot runtime: %s\n" % pilot_runtime
 
+    ############################################################
+    # The pilot description
+    pdesc = radical.pilot.ComputePilotDescription()
+    pdesc.resource   = resource
+    pdesc.runtime    = pilot_runtime
+    pdesc.cores      = pilot_size
+    pdesc.project    = allocation
+    pdesc.cleanup    = False
+
+
+
+    ############################################################
+    # Workload definition
     tasknum   = 0
     all_tasks = []
 
@@ -96,54 +107,16 @@ def run_workload(config, workload):
 
         all_tasks.append(mmpbsa_task)
 
-    # Now that we have created the CU descriptions, we can launch the 
-    # pilot and submit the CUs. 
-    session = radical.pilot.Session(database_url=server, database_name=dbname)
+    ############################################################
+    # Call the batch runner
+    br = BatchRunner(config=config)
+    finished_units = br.run(pilot_description=pdesc, cu_descriptions=all_tasks)
+    if type(finished_units) != list:
+        finished_units = [finished_units]
 
-    try:
-        # Add an ssh identity to the session.
-        cred = radical.pilot.SSHCredential()
-        cred.user_id = username
-        session.add_credential(cred)
+    print "\nRESULT:\n"
+    for unit in finished_units:
+        print unit.stdout
 
-        ############################################################
-        # The resource allocation
-        pmgr = radical.pilot.PilotManager(session=session)
-        pmgr.register_callback(resource_cb)
+    br.close()
 
-        pdesc = radical.pilot.ComputePilotDescription()
-        pdesc.resource   = resource
-        pdesc.runtime    = pilot_runtime
-        pdesc.cores      = pilot_size
-        pdesc.project    = allocation
-        pdesc.cleanup    = True
-
-        pilot = pmgr.submit_pilots(pdesc)
-        pilot.register_callback(resource_cb)
-
-        umgr = radical.pilot.UnitManager(session=session,
-            scheduler=radical.pilot.SCHED_DIRECT_SUBMISSION,
-            input_transfer_workers=2, output_transfer_workers=1)
-        umgr.register_callback(task_cb)
-        umgr.add_pilots(pilot)
-
-        tasks = umgr.submit_units(all_tasks)
-        umgr.wait_units()
-
-        print "\nRESULTS:"
-
-        for task in tasks:
-            print " * Task %s: state: %s, started: %s, finished: %s, results: %s" %\
-                (task.uid, task.state, task.start_time, task.stop_time, task.description.output_data[0].split(" > ")[1])
-
-        session.close()
-
-    except radical.pilot.PilotException, ex:
-        print "ERROR during execution: %s" % str(ex)
-        session.close()
-        return 1
-
-    except Exception, ex:
-        print "ERROR: %s" % str(ex)
-        session.close()
-        return 1
