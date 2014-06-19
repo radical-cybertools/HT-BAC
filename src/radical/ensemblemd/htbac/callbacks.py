@@ -35,6 +35,6 @@ def task_cb(origin, state):
     msg = " * Task %s state changed to '%s'.\n" % (origin.uid, state)
     sys.stderr.write(msg)
 
-    if state == radical.pilot.FAILED:
-        print " * Task {0} (executed @ {1}) state {2}, exit code: {3}, started: {4}, finished: {5}".format(origin.uid, origin.execution_locations, origin.state, origin.exit_code, origin.start_time, origin.stop_time)
-        print " * Task {0} STDERR: {1}".format(origin.uid, origin.stderr)
+    #if state == radical.pilot.FAILED:
+    #    print " * Task {0} (executed @ {1}) state {2}, exit code: {3}, started: {4}, finished: {5}".format(origin.uid, origin.execution_locations, origin.state, origin.exit_code, origin.start_time, origin.stop_time)
+    #    print " * Task {0} STDERR: {1}".format(origin.uid, origin.stderr)

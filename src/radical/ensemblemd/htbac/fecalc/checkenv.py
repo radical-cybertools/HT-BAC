@@ -25,7 +25,7 @@ def run_checkenv(config):
     # The pilot description
     pdesc = radical.pilot.ComputePilotDescription()
     pdesc.resource   = resource
-    pdesc.runtime    = 15 # minutes
+    pdesc.runtime    = 5 # minutes
     pdesc.cores      = 4 
     pdesc.project    = allocation
     pdesc.cleanup    = False
