@@ -8,35 +8,26 @@ __email__     = "ole.weidner@rutgers.edu"
 __copyright__ = "Copyright 2013-2014, The RADICAL Project at Rutgers"
 __license__   = "MIT"
 
-import imp
-import os, sys, uuid
+import os
+import uuid
 import urllib
-import optparse
 import radical.pilot 
 
-from radical.ensemblemd.htbac.common import run_testjob as testjob
-from radical.ensemblemd.htbac.callbacks import *
-from radical.ensemblemd.htbac.kernel import KERNEL
+from radical.ensemblemd.mdkernels import MDTaskDescription
+from radical.ensemblemd.htbac.common import BatchRunner
 
 
-# ----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 def run_testjob(config):
     """Runs a single FE test job.
     """
-    server = config.SERVER
-    dbname = config.DBNAME
-    rconfs = config.RCONFS
-    maxcpus = config.MAXCPUS
     resource = config.RESOURCE
     username = config.USERNAME
     allocation = config.ALLOCATION
-    resource_params = KERNEL[resource]["params"]
-    cores_per_node = resource_params["cores_per_node"]
-    kernelcfg = KERNEL[resource]["kernel"]["namd"]
 
-    # --------------------------------------------------
-    # Download the sample data from  server
+    ############################################################
+    # Download the sample data from server
     sampledata_base_url = config.SAMPLEDATA
     sampledata = {
         "complex.pdb" : "%s/BAC-SIM/complex.pdb" % sampledata_base_url,
@@ -52,43 +43,54 @@ def run_testjob(config):
         print "ERROR - Couldn't download sample data: %s" % str(ex)
         return 1
 
-    # --------------------------------------------------
+    ############################################################
     # The pilot description.
     pdesc = radical.pilot.ComputePilotDescription()
     pdesc.resource   = resource
     pdesc.runtime    = 30 # minutes
-    pdesc.cores      = int(cores_per_node) * 1 # one node
+    pdesc.cores      = 16
     pdesc.project    = allocation
-    pdesc.cleanup    = False
+    pdesc.cleanup    = True
 
-    # --------------------------------------------------
+    ############################################################
     # The test task description.
-    output_file = "./NAMD-test-task-%s" % str(uuid.uuid4())
+
+    mdtd = MDTaskDescription()
+    mdtd.kernel = "NAMD"
+    mdtd.arguments = ["./eq0.inp"]
+
+    mdtd_bound = mdtd.bind(resource=resource)
 
     mmpbsa_test_task = radical.pilot.ComputeUnitDescription()
-    mmpbsa_test_task.environment = kernelcfg["environment"]
-    mmpbsa_test_task.executable = "/bin/bash"
-    mmpbsa_test_task.arguments   = ["-l", "-c", "\"module load namd/2.9 && namd2 ./eq0.inp \""]
-    mmpbsa_test_task.cores = 1
+    mmpbsa_test_task.environment = mdtd_bound.environment 
+    mmpbsa_test_task.pre_exec    = mdtd_bound.pre_exec
+    mmpbsa_test_task.executable  = mdtd_bound.executable
+    mmpbsa_test_task.arguments   = mdtd_bound.arguments
+    mmpbsa_test_task.mpi         = mdtd_bound.mpi
+    mmpbsa_test_task.cores       = 16
+
     mmpbsa_test_task.input_data = ["/%s/complex.pdb" % os.getcwd(),
                                    "/%s/complex.top" % os.getcwd(),
                                    "/%s/cons.pdb" % os.getcwd(),
                                    "/%s/eq0.inp" % os.getcwd()]
+
+    output_file = "./NAMD-test-task-%s" % str(uuid.uuid4())
     mmpbsa_test_task.output_data = ["STDOUT > %s" % output_file]
 
-    # --------------------------------------------------
-    # RUN THE TEST JOB VIA RADICAL-PILOT
-    result = testjob(
-        config=config,
-        pilot_description=pdesc,
-        cu_description=mmpbsa_test_task)
+    ############################################################
+    # Call the batch runner
+    br = BatchRunner(config=config)
+    finished_units = br.run(pilot_description=pdesc, cu_descriptions=mmpbsa_test_task)
 
-    # --------------------------------------------------
+    print "\nRESULT:\n"
+    print finished_units.stdout
+
+    br.close()
+
+    ############################################################
     # Try to remove the sample input data - silently fail on error.
     try:
         for key, val in sampledata.iteritems():
             os.remove("./%s" % key)
     except Exception:
         pass
-
-    return result

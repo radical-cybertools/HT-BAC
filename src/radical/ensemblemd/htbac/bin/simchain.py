@@ -15,7 +15,7 @@ import optparse
 #from radical.ensemblemd.htbac.simchain import run_benchmark
 #from radical.ensemblemd.htbac.simchain import run_workload
 from radical.ensemblemd.htbac.simchain import run_checkenv
-#from radical.ensemblemd.htbac.simchain import run_testjob
+from radical.ensemblemd.htbac.simchain import run_testjob
 
 
 # ----------------------------------------------------------------------------
