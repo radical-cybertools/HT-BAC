@@ -9,8 +9,8 @@ WORKLOAD = []
 
 root_dir = "/Users/oweidner/htbac-examples/"
 
-# We define 32 tasks -- for practical purposes, they are all the same.
-for tj in range(0, 1):
+# We define 16 tasks with 4 cores each -- for practical purposes, they are all the same.
+for tj in range(0, 16):
 
     task = {
     	# Runtime of the MMPBSA task. With 4 cores, it takes roughly 10 minutes.
@@ -28,7 +28,7 @@ for tj in range(0, 1):
         # Input trajectories to analyze.
         "trajectory"      : root_dir+"./mmpbsa-sample-data/trajectories/rep1.traj", 
         # Output filename.
-        "output"  : "mmpbsa-task-%s.out" % tj
+        "output"          : "mmpbsa-task-%s.out" % tj
     }
 
     WORKLOAD.append(task)

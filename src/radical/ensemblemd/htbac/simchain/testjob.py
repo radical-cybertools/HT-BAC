@@ -69,10 +69,10 @@ def run_testjob(config):
     mmpbsa_test_task.mpi         = mdtd_bound.mpi
     mmpbsa_test_task.cores       = 16
 
-    mmpbsa_test_task.input_data = ["/%s/complex.pdb" % os.getcwd(),
-                                   "/%s/complex.top" % os.getcwd(),
-                                   "/%s/cons.pdb" % os.getcwd(),
-                                   "/%s/eq0.inp" % os.getcwd()]
+    mmpbsa_test_task.input_data  = [ "/%s/complex.pdb" % os.getcwd(),
+                                     "/%s/complex.top" % os.getcwd(),
+                                     "/%s/cons.pdb" % os.getcwd(),
+                                     "/%s/eq0.inp" % os.getcwd() ]
 
     output_file = "./NAMD-test-task-%s" % str(uuid.uuid4())
     mmpbsa_test_task.output_data = ["STDOUT > %s" % output_file]
