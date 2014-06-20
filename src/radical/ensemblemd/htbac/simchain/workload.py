@@ -100,6 +100,7 @@ def run_workload(config, workload):
         mmpbsa_task.arguments   = mdtd_bound.arguments
         mmpbsa_task.mpi         = mdtd_bound.mpi
         mmpbsa_task.cores       = task["cores"]
+        mmpbsa_task.name        = task["name"]
 
         mmpbsa_task.input_data  = [parmfile, coordinates, conskfile, input]
         mmpbsa_task.output_data = ["STDOUT > %s" % output]
@@ -113,9 +114,16 @@ def run_workload(config, workload):
     if type(finished_units) != list:
         finished_units = [finished_units]
 
-    print "\nRESULT:\n"
-    for task in all_tasks:
-        print "Output for task {0} in {1}".format(task.uid, task.output_data.split(">"[1]))
+    print "\nDONE"
+    print "=============================================================================\n"
+
+    for unit in finished_units:
+        t_start = unit.start_time
+        t_stop = unit.stop_time
+        t_run = t_stop - t_start
+
+        local_output = unit.description.output_data[0].split(" > ")[1]
+        print " o Task {0} RUNTIME {1} OUTPUT: {2}".format(unit.description.name, t_run, local_output)
 
     br.close()
 

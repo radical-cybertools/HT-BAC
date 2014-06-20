@@ -101,6 +101,7 @@ def run_workload(config, workload):
         mmpbsa_task.arguments   = mdtd_bound.arguments
         mmpbsa_task.mpi         = mdtd_bound.mpi
         mmpbsa_task.cores       = task["cores"]
+        mmpbsa_task.name        = task["name"]
 
         mmpbsa_task.input_data  = [input_nmode, input_com, input_rec, input_lig, input_traj]
         mmpbsa_task.output_data = ["FINAL_RESULTS_MMPBSA.dat > %s" % output]
@@ -114,9 +115,16 @@ def run_workload(config, workload):
     if type(finished_units) != list:
         finished_units = [finished_units]
 
-    print "\nRESULT:\n"
+    print "\nDONE"
+    print "=============================================================================\n"
+
     for unit in finished_units:
-        print unit.stdout
+        t_start = unit.start_time
+        t_stop = unit.stop_time
+        t_run = t_stop - t_start
+
+        local_output = unit.description.output_data[0].split(" > ")[1]
+        print " o Task {0} RUNTIME {1} OUTPUT: {2}".format(unit.description.name, t_run, local_output)
 
     br.close()
 
