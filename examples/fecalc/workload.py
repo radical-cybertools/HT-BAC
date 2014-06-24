@@ -11,11 +11,11 @@
 
 WORKLOAD = []
 
-INPUT_DATA_ROOT_DIR  = "/Users/oweidner/htbac-examples/mmpbsa-sample-data/"
-#INPUT_DATA_ROOT_DIR = "/home1/00988/tg802352/htbac-sampledata/mmpbsa-sample-data/"
+#INPUT_DATA_ROOT_DIR  = "/Users/oweidner/htbac-examples/mmpbsa-sample-data/"
+INPUT_DATA_ROOT_DIR = "/home1/00988/tg802352/htbac-sampledata/mmpbsa-sample-data/"
 
 # We define 16 tasks with 4 cores each -- for practical purposes, they are all the same.
-for tj in range(0, 16):
+for tj in range(0, 1):
 
     task = {
 
@@ -28,7 +28,7 @@ for tj in range(0, 16):
 
         # Location of the input data: "LOCAL" means on this machine 
         # (input transfer required), "REMOTE" means on the remote machine.
-        "input_data_location"  : "LOCAL", 
+        "input_data_location"  : "REMOTE", 
         # Location to put the output data: "LOCAL" means on this machine 
         # (output transfer required)| "REMOTE" means on the remote machine.
         "output_data_location" : "LOCAL",

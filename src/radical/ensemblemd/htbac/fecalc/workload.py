@@ -75,14 +75,20 @@ def run_workload(config, workload):
 
         # Process data handling.
         idl = task["input_data_location"]
-        odl = task["output_data_location"]
-
         if idl.lower() == "local":
-            pass
+            idl_remote = False
         elif idl.lower() == "remote":
-            pass
+            idl_remote = True
         else:
-            print "Unknown 'input_data_location': {0}".format(ill) 
+            print "Unknown 'input_data_location': {0}".format(idl) 
+
+        idl = task["output_data_location"]
+        if idl.lower() == "local":
+            odl_remote = False
+        elif idl.lower() == "remote":
+            odl_remote = True
+        else:
+            print "Unknown 'output_data_location': {0}".format(odl) 
 
         input_nmode = task["input"]
         nmode_basen = os.path.basename(input_nmode)
@@ -105,6 +111,9 @@ def run_workload(config, workload):
         mdtd.kernel = "MMPBSA"
         mdtd.arguments = "-i {0} -cp {1} -rp {2} -lp {3} -y {4}".format(nmode_basen, com_basen, rec_basen, lig_basen, traj_basen)
 
+        if idl_remote is True:
+            mdtd.copy_local_input_data = [input_nmode, input_com, input_rec, input_lig, input_traj]
+
         mdtd_bound = mdtd.bind(resource=resource)
 
         mmpbsa_task = radical.pilot.ComputeUnitDescription()
@@ -116,7 +125,11 @@ def run_workload(config, workload):
         mmpbsa_task.cores       = task["cores"]
         mmpbsa_task.name        = task["name"]
 
-        mmpbsa_task.input_data  = [input_nmode, input_com, input_rec, input_lig, input_traj]
+        if idl_remote is False:
+            # No remote files. All files are local and need to be transferred
+            mmpbsa_task.input_data  = [input_nmode, input_com, input_rec, input_lig, input_traj]
+
+
         mmpbsa_task.output_data = ["FINAL_RESULTS_MMPBSA.dat > %s" % output]
 
         all_tasks.append(mmpbsa_task)
