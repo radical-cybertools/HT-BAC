@@ -36,10 +36,12 @@ def run_workload(config, workload):
     # NOTE: currently, we assume (near) homogenous runtime among all tasks.
     task_runtime = workload[0]["runtime"]
 
-    if len(workload) < maxcpus:
-        pilot_size = 16 * (len(workload) / 16)
-        if len(workload) % 16 > 0:
-            pilot_size += 16
+    cores = 0
+    for task in workload:
+        cores += task["cores"]
+
+    if cores < maxcpus:
+        pilot_size = cores
         pilot_runtime = task_runtime
     else:
         pilot_size = maxcpus
@@ -70,6 +72,17 @@ def run_workload(config, workload):
     # Create CU descriptions from workload taks...
     for task in workload:
         tasknum += 1
+
+        # Process data handling.
+        idl = task["input_data_location"]
+        odl = task["output_data_location"]
+
+        if idl.lower() == "local":
+            pass
+        elif idl.lower() == "remote":
+            pass
+        else:
+            print "Unknown 'input_data_location': {0}".format(ill) 
 
         input_nmode = task["input"]
         nmode_basen = os.path.basename(input_nmode)
