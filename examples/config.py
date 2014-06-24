@@ -25,7 +25,15 @@ SAMPLEDATA = "http://testing.saga-project.org/cybertools/sampledata/"
 #------------------------------------------------------------------------------
 # The settings below are only relevant if you want to run the benchmarks.
 #
-BENCHMARK_PILOT_SIZES  = [16, 32, 64, 128, 256, 512] # Pilot sizes to allocate.
-BENCHMARK_TASK_BATCHES = 4  # Number of tasks batches to run for each pilot
-                            # size. For example, for pilot size 16, a task
-                            # batch '4' will submit 16, 32, 48 and 64 tasks.
+INPUT_DATA_ROOT_DIR = "/home1/00988/tg802352/htbac-sampledata/mmpbsa-sample-data/"
+
+FECALC_BENCHMARK_DBNAME              = "radical-ensemblemd-htbac-fecalc-benchmark"
+FECALC_BENCHMARK_PILOT_SIZES         = [16, 32, 64, 128, 256, 512]
+FECALC_BENCHMARK_TASK_PARALLELISM    = [1, 2, 4, 8, 16]
+FECALC_BENCHMARK_BATCHS              = 1
+FECALC_BENCHMARK_INPUT_DATA_LOCATION = "REMOTE"
+FECALC_BENCHMARK_INPUT_DATA          = [INPUT_DATA_ROOT_DIR+"./nmode.5h.py",
+                                        INPUT_DATA_ROOT_DIR+"./com.top.2",
+                                        INPUT_DATA_ROOT_DIR+"./rec.top.2",
+                                        INPUT_DATA_ROOT_DIR+"./lig.top",
+                                        INPUT_DATA_ROOT_DIR+"./trajectories/rep1.traj"]
