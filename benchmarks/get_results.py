@@ -52,6 +52,18 @@ SESSION_IDS = {
                     "53aab1ae0941deb6c48e47bd",
                     "53aab7e40941deb6c48e4841",
                     "53aac3ed0941de0fd7913e9c"
+                    ],
+
+
+                "1" : [
+                    # TLP 1
+                    "53aacfe70941de414c3f9f7b",
+                    "53aad24a0941de414c3f9f8f",
+                    "53aad4a70941de414c3f9fb3",
+                    "53aad8970941de414c3f9ff7",
+                    "53aadb6e0941de414c3fa07b",
+                    "53aadee20941de414c3fa17f",
+                    "53aae3850941de414c3fa383"
                     ]
                 }
 
