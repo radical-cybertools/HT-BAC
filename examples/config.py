@@ -29,7 +29,7 @@ INPUT_DATA_ROOT_DIR = "/work/00988/tg802352/htbac-sampledata/mmpbsa-sample-data/
 
 FECALC_BENCHMARK_DBNAME              = "radical-ensemblemd-htbac-fecalc-benchmark"
 FECALC_BENCHMARK_PILOT_SIZES         = [16, 32, 64, 128, 256, 512, 1024]
-FECALC_BENCHMARK_TASK_PARALLELISM    = [2]
+FECALC_BENCHMARK_TASK_PARALLELISM    = [1]
 FECALC_BENCHMARK_INPUT_DATA_LOCATION = "REMOTE"
 FECALC_BENCHMARK_INPUT_DATA          = [INPUT_DATA_ROOT_DIR+"./nmode.5h.py",
                                         INPUT_DATA_ROOT_DIR+"./com.top.2",

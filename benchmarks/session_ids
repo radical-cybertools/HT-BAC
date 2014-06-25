@@ -1,0 +1,72 @@
+
+
+
+Pilot size:  16 Task parallelism:   8 Num tasks:   2. Session ID: 53aa77f40941deb22e580484
+ o STARTED 
+ o FINISHED
+Pilot size:  32 Task parallelism:   8 Num tasks:   4. Session ID: 53aa788b0941deb22e58048a
+ o STARTED 
+ o FINISHED
+Pilot size:  64 Task parallelism:   8 Num tasks:   8. Session ID: 53aa79290941deb22e580492
+ o STARTED 
+ o FINISHED
+Pilot size: 128 Task parallelism:   8 Num tasks:  16. Session ID: 53aa79cf0941deb22e58049e
+ o STARTED 
+ o FINISHED
+Pilot size: 256 Task parallelism:   8 Num tasks:  32. Session ID: 53aa7a7f0941deb22e5804b2
+ o STARTED 
+ o FINISHED
+Pilot size: 512 Task parallelism:   8 Num tasks:  64. Session ID: 53aa7b3c0941deb22e5804d6
+ o STARTED 
+ o FINISHED
+Pilot size: 1024 Task parallelism:   8 Num tasks: 128. Session ID: 53aa7c220941deb22e58051a
+ o STARTED 
+ o FINISHED
+
+
+
+Pilot size:  16 Task parallelism:   4 Num tasks:   4. Session ID: 53aa842b0941deb3eef861df
+ o STARTED 
+ o FINISHED
+Pilot size:  32 Task parallelism:   4 Num tasks:   8. Session ID: 53aa84fb0941deb3eef861e7
+ o STARTED 
+ o FINISHED
+Pilot size:  64 Task parallelism:   4 Num tasks:  16. Session ID: 53aa85f60941deb3eef861f3
+ o STARTED 
+ o FINISHED
+Pilot size: 128 Task parallelism:   4 Num tasks:  32. Session ID: 53aa86f00941deb3eef86207
+ o STARTED 
+ o FINISHED
+Pilot size: 256 Task parallelism:   4 Num tasks:  64. Session ID: 53aa882e0941deb3eef8622b
+ o STARTED 
+ o FINISHED
+Pilot size: 512 Task parallelism:   4 Num tasks: 128. Session ID: 53aa89720941deb3eef8626f
+ o STARTED 
+ o FINISHED
+Pilot size: 1024 Task parallelism:   4 Num tasks: 256. Session ID: 53aa8ad70941deb3eef862f3
+ o STARTED 
+ o FINISHED
+
+
+Pilot size:  16 Task parallelism:   2 Num tasks:   8. Session ID: 53aaac210941deb6c48e4735
+ o STARTED 
+ o FINISHED
+Pilot size:  32 Task parallelism:   2 Num tasks:  16. Session ID: 53aaad6a0941deb6c48e4741
+ o STARTED 
+ o FINISHED
+Pilot size:  64 Task parallelism:   2 Num tasks:  32. Session ID: 53aaaeb90941deb6c48e4755
+ o STARTED 
+ o FINISHED
+Pilot size: 128 Task parallelism:   2 Num tasks:  64. Session ID: 53aab0210941deb6c48e4779
+ o STARTED 
+ o FINISHED
+Pilot size: 256 Task parallelism:   2 Num tasks: 128. Session ID: 53aab1ae0941deb6c48e47bd
+ o STARTED 
+^[[A o FINISHED
+Pilot size: 512 Task parallelism:   2 Num tasks: 256. Session ID: 53aab7e40941deb6c48e4841
+ o STARTED 
+ o FINISHED
+ Pilot size: 1024 Task parallelism:   2 Num tasks: 512. Session ID: 53aac3ed0941de0fd7913e9c
+ o STARTED 
+ o FINISHED
+
