@@ -25,12 +25,11 @@ SAMPLEDATA = "http://testing.saga-project.org/cybertools/sampledata/"
 #------------------------------------------------------------------------------
 # The settings below are only relevant if you want to run the benchmarks.
 #
-INPUT_DATA_ROOT_DIR = "/home1/00988/tg802352/htbac-sampledata/mmpbsa-sample-data/"
+INPUT_DATA_ROOT_DIR = "/work/00988/tg802352/htbac-sampledata/mmpbsa-sample-data/"
 
 FECALC_BENCHMARK_DBNAME              = "radical-ensemblemd-htbac-fecalc-benchmark"
-FECALC_BENCHMARK_PILOT_SIZES         = [16, 32, 64, 128, 256, 512]
-FECALC_BENCHMARK_TASK_PARALLELISM    = [1, 2, 4, 8, 16]
-FECALC_BENCHMARK_BATCHS              = 1
+FECALC_BENCHMARK_PILOT_SIZES         = [16, 32, 64, 128, 256, 512, 1024]
+FECALC_BENCHMARK_TASK_PARALLELISM    = [2]
 FECALC_BENCHMARK_INPUT_DATA_LOCATION = "REMOTE"
 FECALC_BENCHMARK_INPUT_DATA          = [INPUT_DATA_ROOT_DIR+"./nmode.5h.py",
                                         INPUT_DATA_ROOT_DIR+"./com.top.2",
