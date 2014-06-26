@@ -1,6 +1,10 @@
 import os
 import sys
+import datetime
 import radical.pilot
+
+def chop_microseconds(delta):
+    return delta - datetime.timedelta(microseconds=delta.microseconds)
 
 DBURL = os.getenv("RADICAL_PILOT_DBURL")
 if DBURL is None:
@@ -71,9 +75,13 @@ try:
 
     # NOW LET'S TRY TO RECONENCT
     for tlp, session_ids in SESSION_IDS.iteritems():
-        print "TLP: %s" % tlp
+        #print "TLP: %s" % tlp
         for session_id in session_ids:
             session = radical.pilot.Session(database_url=DBURL, database_name=DBNAME, session_uid=session_id)
+
+            pm = session.get_pilot_managers()[0]
+            pilot = pm.get_pilots()[0]
+            pilot_cores = pilot.description['cores']
 
             um = session.get_unit_managers()[0]
             units = um.get_units()
@@ -81,17 +89,19 @@ try:
             earliest_start_time = None
             latests_stop_time = None
             for unit in units:
-                if earliest_start_time is None:
-                    earliest_start_time = unit.start_time
-                elif unit.start_time < earliest_start_time:
-                    earliest_start_time = unit.start_time
+                runtime = unit.stop_time - unit.start_time
+                print "{0} {1} {2}".format(tlp, pilot_cores, runtime.seconds)
+            #     if earliest_start_time is None:
+            #         earliest_start_time = unit.start_time
+            #     elif unit.start_time < earliest_start_time:
+            #         earliest_start_time = unit.start_time
 
-                if latests_stop_time is None:
-                    latests_stop_time = unit.stop_time
-                elif unit.stop_time > latests_stop_time:
-                    latests_stop_time = unit.stop_time
+            #     if latests_stop_time is None:
+            #         latests_stop_time = unit.stop_time
+            #     elif unit.stop_time > latests_stop_time:
+            #         latests_stop_time = unit.stop_time
 
-            print " * Units: %s. Exec duration %s " % (len(units), latests_stop_time - earliest_start_time)
+            # print " * Units: %s. Exec duration %s " % (len(units), latests_stop_time - earliest_start_time)
 
             session.close(delete=False)
 
