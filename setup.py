@@ -136,7 +136,7 @@ setup_args = {
     'package_dir' :       {'': 'src'},  
 
     'package_data'     :  {'': ['*.sh', 'VERSION', 'VERSION.git']},
-    'install_requires' :  ['radical.pilot', 'radical.ensemblemd.mdkernels', 'setuptools>=1'],
+    'install_requires' :  ['radical.pilot', 'setuptools>=1'],
 
     'zip_safe'         : False,
 }
