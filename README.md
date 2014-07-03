@@ -21,6 +21,7 @@ The latest version of HT-BAC can be installed directly
 from GitHub:
 
 ```
+pip install --upgrade git+https://github.com/radical-cybertools/radical.ensemblemd.mdkernels.git@release#egg=radical.ensemblemd.mdkernels
 pip install --upgrade git+https://github.com/radical-cybertools/HT-BAC.git@release#egg=radical.ensemblemd.htbac
 ```
 

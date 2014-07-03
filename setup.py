@@ -120,9 +120,9 @@ setup_args = {
              'htbac-simchain = radical.ensemblemd.htbac.bin.simchain:main']
     },
 
-    'dependency_links': [
-      'git+ssh://git@github.com/radical-cybertools/radical.ensemblemd.mdkernels.git@release#egg=radical.ensemblemd.mdkernels'
-     ],
+#    'dependency_links': [
+#      'git+ssh://git@github.com/radical-cybertools/radical.ensemblemd.mdkernels.git@release#egg=radical.ensemblemd.mdkernels'
+#     ],
 
     'namespace_packages': ['radical', 'radical.ensemblemd'],
     'packages'    :       ['radical', 
