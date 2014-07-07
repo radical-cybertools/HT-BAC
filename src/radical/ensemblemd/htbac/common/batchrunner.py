@@ -29,9 +29,11 @@ class BatchRunner(object):
         self.session = radical.pilot.Session(database_url=server, database_name=dbname)
 
         # Add an ssh identity to the session.
-        cred = radical.pilot.SSHCredential()
+
+        cred = radical.pilot.Context('ssh')
+        #cred = radical.pilot.SSHCredential()
         cred.user_id = username
-        self.session.add_credential(cred)
+        self.session.add_context(cred)
 
     # -------------------------------------------------------------------------
     #
