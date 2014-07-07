@@ -116,32 +116,45 @@ tar xzf mmpbsa-sample-data.tgz
 ```
 
 Next, define the workload (here we use the same input files for all tasks for simplicity).
-Open a file `workload.py` and put in the following:
+Use the one below or simply download it from [here](https://raw.githubusercontent.com/radical-cybertools/HT-BAC/master/examples/fecalc/workload.py).
 
 ```
 WORKLOAD = []
 
+INPUT_DATA_ROOT_DIR  = "."
+
+# We define 16 tasks with 4 cores each -- for practical purposes, they are all the same.
 for tj in range(0, 16):
 
     task = {
-        # Runtime of a 4-core MMPBSA task.
-        "runtime"         : 5,
-        # Number of cores to use for the MMPBSA task.
+
+        # Runtime of the MMPBSA task. With 4 cores, it takes roughly 10 minutes.
+        "runtime"         : 30,
+        # Number of cores to use for the MMPBSA task (uses MPI)
         "cores"           : 4,
         # Give the task a name
-        "name"            : "sample-mmpbsa-task-{0}".format(tj),
-        # MMPBSA input file.
-        "input"           : "./mmpbsa-sample-data/nmode.5h.py",
+        "name"            : "sample-fecalc-task-{0}".format(tj),
+
+        # Location of the input data: "LOCAL" means on this machine 
+        # (input transfer required), "REMOTE" means on the remote machine.
+        "input_data_location"  : "REMOTE", 
+        # Location to put the output data: "LOCAL" means on this machine 
+        # (output transfer required)| "REMOTE" means on the remote machine.
+        "output_data_location" : "LOCAL",
+
+        # NAMD-specific input files.
+        #
+        "input"           : INPUT_DATA_ROOT_DIR+"./nmode.5h.py",
         # Complex topology file
-        "complex_prmtop"  : "./mmpbsa-sample-data/com.top.2",
+        "complex_prmtop"  : INPUT_DATA_ROOT_DIR+"./com.top.2",
         # Receptor topology file
-        "receptor_prmtop" : "./mmpbsa-sample-data/rec.top.2",
+        "receptor_prmtop" : INPUT_DATA_ROOT_DIR+"./rec.top.2",
         # Ligand topology file.
-        "ligand_prmtop"   : "./mmpbsa-sample-data/lig.top",
+        "ligand_prmtop"   : INPUT_DATA_ROOT_DIR+"./lig.top",
         # Input trajectories to analyze.
-        "trajectory"      : "./mmpbsa-sample-data/trajectories/rep1.traj", 
+        "trajectory"      : INPUT_DATA_ROOT_DIR+"./trajectories/rep1.traj", 
         # Output filename.
-        "output"          : "sample-mmpbsa-task-{0}.out".format(tj)
+        "output"          : "sample-mmpbsa-task-%s.out" % tj
     }
 
     WORKLOAD.append(task)
