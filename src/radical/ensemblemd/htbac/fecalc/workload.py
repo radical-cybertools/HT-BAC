@@ -75,17 +75,17 @@ def run_workload(config, workload):
 
         # Process data handling.
         idl = task["input_data_location"]
-        if idl.lower() == "local":
+        if idl.lower() == "here":
             idl_remote = False
-        elif idl.lower() == "remote":
+        elif idl.lower() == "there":
             idl_remote = True
         else:
             print "Unknown 'input_data_location': {0}".format(idl) 
 
         idl = task["output_data_location"]
-        if idl.lower() == "local":
+        if idl.lower() == "here":
             odl_remote = False
-        elif idl.lower() == "remote":
+        elif idl.lower() == "there":
             odl_remote = True
         else:
             print "Unknown 'output_data_location': {0}".format(odl) 

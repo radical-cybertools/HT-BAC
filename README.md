@@ -119,12 +119,14 @@ Next, define the workload (here we use the same input files for all tasks for si
 Use the one below or simply download it from [here](https://raw.githubusercontent.com/radical-cybertools/HT-BAC/master/examples/fecalc/workload.py).
 
 ```
+import os
+
 WORKLOAD = []
 
-INPUT_DATA_ROOT_DIR  = "."
+INPUT_DATA_ROOT_DIR  = "{0}/mmpbsa-sample-data/".format(os.getcwd())
 
-# We define 16 tasks with 4 cores each -- for practical purposes, they are all the same.
-for tj in range(0, 16):
+# We define 4 tasks with 4 cores each -- for practical purposes, they are all the same.
+for tj in range(0, 4):
 
     task = {
 
@@ -135,12 +137,12 @@ for tj in range(0, 16):
         # Give the task a name
         "name"            : "sample-fecalc-task-{0}".format(tj),
 
-        # Location of the input data: "LOCAL" means on this machine 
-        # (input transfer required), "REMOTE" means on the remote machine.
-        "input_data_location"  : "REMOTE", 
-        # Location to put the output data: "LOCAL" means on this machine 
-        # (output transfer required)| "REMOTE" means on the remote machine.
-        "output_data_location" : "LOCAL",
+        # Location of the input data: "HERE" means on this machine 
+        # (input transfer required), "THERE" means on the remote machine.
+        "input_data_location"  : "HERE", 
+        # Location to put the output data: "HERE" means on this machine 
+        # (output transfer required)| "THERE" means on the remote machine.
+        "output_data_location" : "HERE",
 
         # NAMD-specific input files.
         #
@@ -273,19 +275,24 @@ Next, define the workload (here we use the same input files for all tasks for si
 Open a file `workload.py` and put in the following:
 
 ```
+import os 
+
 WORKLOAD = []
 
-for tj in range(0, 16):
+INPUT_DATA_ROOT_DIR  = "{0}/simchain-sample-data/".format(os.getcwd())
+
+# We define 4 tasks with 16 cores each -- for practical purposes, they are all the same.
+for tj in range(0, 4):
 
     task = {
         "runtime"            : 15,
         "cores"              : 16,
-        "parmfile"           : "./simchain-sample-data/complex.top",
-        "coordinates"        : "./simchain-sample-data/complex.pdb",
-        "conskfile"          : "./simchain-sample-data/cons.pdb",
-        "input"              : "./simchain-sample-data/eq0.inp",
-        "name"               : "sample-simchain-task-{0}".format(tj),
-        "output"             : "sample-simchain-task-%s.out" % tj
+        "parmfile"           : INPUT_DATA_ROOT_DIR+"./simchain-sample-data/complex.top",
+        "coordinates"        : INPUT_DATA_ROOT_DIR+"./simchain-sample-data/complex.pdb",
+        "conskfile"          : INPUT_DATA_ROOT_DIR+"./simchain-sample-data/cons.pdb",
+        "input"              : INPUT_DATA_ROOT_DIR+"./simchain-sample-data/eq0.inp",
+        "name"               : INPUT_DATA_ROOT_DIR+"sample-simchain-task-{0}".format(tj),
+        "output"             : INPUT_DATA_ROOT_DIR+"sample-simchain-task-%s.out" % tj
     }
 
     WORKLOAD.append(task)
