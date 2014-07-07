@@ -118,7 +118,7 @@ def run_workload(config, workload):
     print "=============================================================================\n"
 
     for unit in finished_units:
-        if unit.state is radical.pilot.DONE:
+        if unit.state == radical.pilot.DONE:
             t_start = unit.start_time
             t_stop = unit.stop_time
             t_run = t_stop - t_start
