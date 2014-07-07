@@ -118,9 +118,12 @@ def run_workload(config, workload):
     print "=============================================================================\n"
 
     for unit in finished_units:
-        t_start = unit.start_time
-        t_stop = unit.stop_time
-        t_run = t_stop - t_start
+        if unit.state is radical.pilot.DONE:
+            t_start = unit.start_time
+            t_stop = unit.stop_time
+            t_run = t_stop - t_start
+        else:
+            t_run = "failed"
 
         local_output = unit.description.output_data[0].split(" > ")[1]
         print " o Task {0} RUNTIME {1} OUTPUT: {2}".format(unit.description.name, t_run, local_output)

@@ -281,16 +281,16 @@ WORKLOAD = []
 
 INPUT_DATA_ROOT_DIR  = "{0}/simchain-sample-data/".format(os.getcwd())
 
-# We define 4 tasks with 16 cores each -- for practical purposes, they are all the same.
+# We define 4 tasks with 16 cores each -- for practical purposes, they are all the same.g
 for tj in range(0, 4):
 
     task = {
         "runtime"            : 15,
         "cores"              : 16,
-        "parmfile"           : INPUT_DATA_ROOT_DIR+"./simchain-sample-data/complex.top",
-        "coordinates"        : INPUT_DATA_ROOT_DIR+"./simchain-sample-data/complex.pdb",
-        "conskfile"          : INPUT_DATA_ROOT_DIR+"./simchain-sample-data/cons.pdb",
-        "input"              : INPUT_DATA_ROOT_DIR+"./simchain-sample-data/eq0.inp",
+        "parmfile"           : INPUT_DATA_ROOT_DIR+"./complex.top",
+        "coordinates"        : INPUT_DATA_ROOT_DIR+"./complex.pdb",
+        "conskfile"          : INPUT_DATA_ROOT_DIR+"./cons.pdb",
+        "input"              : INPUT_DATA_ROOT_DIR+"./eq0.inp",
         "name"               : INPUT_DATA_ROOT_DIR+"sample-simchain-task-{0}".format(tj),
         "output"             : INPUT_DATA_ROOT_DIR+"sample-simchain-task-%s.out" % tj
     }
