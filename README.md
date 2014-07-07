@@ -2,8 +2,9 @@
 
 HT-BAC provides a set of tools for running large number of parallel molecular dynamics binding affinity calculations on HPC clusters. It provides two command line tools:
 
-* `htbac-simchain` - runs namd2 simulations (**see section 2.2**).
-* `htbac-fecalc` - runs mmpbsa free energy calculations (**see section 2.3**).
+* `htbac-fecalc` - runs amber / mmpbsa free energy calculations (**see section 2.2**).
+* `htbac-simchain` - runs namd2 simulations (**see section 2.3**).
+
 
 ## 1. Installation
 
