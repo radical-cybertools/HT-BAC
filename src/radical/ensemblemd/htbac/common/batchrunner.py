@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+!/usr/bin/env python
 
 __author__    = "Ole Weidner <ole.weidner@rutgers.edu>"
 __copyright__ = "Copyright 2013-2014, http://radical.rutgers.org"
@@ -60,5 +60,6 @@ class BatchRunner(object):
 
         except radical.pilot.PilotException, ex:
             print "ERROR during execution: %s" % str(ex)
-            session.close()
+            self.session.close()
             return None
+
