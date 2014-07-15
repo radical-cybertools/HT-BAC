@@ -4,10 +4,11 @@
 #------------------------------------------------------------------------------
 # Change the values below according to your requirements.
 #
-RESOURCE   = "archer.ac.uk"               # The name of the remote machine.
-USERNAME   = "oweidner"                   # Your username on the remote machine.
-ALLOCATION = "e290"                       # The allocation or project to charge.
-MAXCPUS    = 1024                         # Maximum number of CPUs to allocate.
+RESOURCE   = "archer.ac.uk"                # The name of the remote machine.
+USERNAME   = "ocwe10"                      # Your username on the remote machine.
+ALLOCATION = "e10"                         # The allocation or project to charge.
+WORKDIR    = "/work/e10/e10/ocwe10/HT-BAC" # The working directory ("sandbox")
+MAXCPUS    = 1024                          # Maximum number of CPUs to allocate.
 
 #------------------------------------------------------------------------------
 # Change the settings below *ONLY* if you want to use a different MongoDB
