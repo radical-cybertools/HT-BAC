@@ -25,7 +25,6 @@ def resource_cb(origin, state):
         for entry in origin.log:
             print "   * LOG: %s" % entry
         sys.stderr.write("   * EXITING.\n")
-        sys.exit(-1)
 
 # ----------------------------------------------------------------------------
 #
