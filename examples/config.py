@@ -7,11 +7,12 @@
 RESOURCE   = "stampede.tacc.utexas.edu"   # The name of the remote machine.
 USERNAME   = "tg802352"                   # Your username on the remote machine.
 ALLOCATION = "TG-MCB090174"               # The allocation or project to charge.
+WORKDIR    = "/TODO"                      # The working directory ("sandbox")
 MAXCPUS    = 1024                         # Maximum number of CPUs to allocate.
 
 #------------------------------------------------------------------------------
 # Change the settings below *ONLY* if you want to use a different MongoDB
-# server or different / additional resource configuration files.
+# server.
 #
 SERVER     = "mongodb://ec2-184-72-89-141.compute-1.amazonaws.com:27017"
 DBNAME     = "radical-ensemblemd"

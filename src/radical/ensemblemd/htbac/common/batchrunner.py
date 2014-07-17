@@ -23,8 +23,9 @@ class BatchRunner(object):
         server = config.SERVER
         dbname = config.DBNAME
 
-        username = config.USERNAME
+        username   = config.USERNAME
         allocation = config.ALLOCATION
+        self.workdir    = config.WORKDIR
 
         self.session = radical.pilot.Session(database_url=server, database_name=dbname)
 
@@ -48,6 +49,9 @@ class BatchRunner(object):
             pmgr = radical.pilot.PilotManager(session=self.session)
             pmgr.register_callback(resource_cb)
 
+            # Add the work dir to the cu_description
+            pilot_description.sandbox = self.workdir
+
             pilot = pmgr.submit_pilots(pilot_description)
 
             umgr = radical.pilot.UnitManager(session=self.session,
@@ -62,5 +66,6 @@ class BatchRunner(object):
 
         except radical.pilot.PilotException, ex:
             print "ERROR during execution: %s" % str(ex)
-            session.close()
+            self.session.close()
             return None
+
