@@ -23,9 +23,9 @@ class BatchRunner(object):
         server = config.SERVER
         dbname = config.DBNAME
 
-        username   = config.USERNAME
-        allocation = config.ALLOCATION
-        self.workdir    = config.WORKDIR
+        username     = config.USERNAME
+        allocation   = config.ALLOCATION
+        self.workdir = config.WORKDIR
 
         self.session = radical.pilot.Session(database_url=server, database_name=dbname)
 
