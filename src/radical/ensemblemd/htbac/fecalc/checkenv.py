@@ -29,6 +29,7 @@ def run_checkenv(config):
     pdesc.cores      = 4 
     pdesc.project    = allocation
     pdesc.cleanup    = False
+    pdesc.sandbox    = config.WORKDIR
 
     ############################################################
     # The checkenv task
