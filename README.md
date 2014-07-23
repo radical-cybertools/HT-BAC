@@ -353,8 +353,24 @@ The workload will allocate `16*16` = **256 cores** and will take about *15 minut
  
  ```
 
+## 3. Running on Archer and Other Systems
 
-## 3. Tips and Best Practice
+The above examples are all using TACC's stampede HPC cluster. However, it is 
+trivial to execute `fecalc` and `simchain` workloads on other systems simply
+by modifying `config.py`. If you want to use Archer (a Cray XT system), change
+your configuration file like this:
+
+```
+RESOURCE   = "archer.ac.uk"                # The name of the remote machine.
+USERNAME   = "archer-username"             # Your username on the remote machine.
+ALLOCATION = "archer-allocation"           # The allocation or project to charge.
+WORKDIR    = "/work/your/home/dir/HT-BAC" # The working directory ("sandbox")
+MAXCPUS    = 1024                          # Maximum number of CPUs to allocate.
+```
+
+Submitting workloads works just like it is described in sections 2.2 and 2.3.
+
+## 4. Tips and Best Practice
 
 ### Use tmux for Long Running Simulations
 
