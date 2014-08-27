@@ -38,10 +38,11 @@ def run_benchmark(config):
             # Set up the session:
             session = radical.pilot.Session(database_url=server, database_name=dbname)
 
-            # Add an ssh identity to the session.
-            cred = radical.pilot.SSHCredential()
+            cred = radical.pilot.Context('ssh')
+            #cred = radical.pilot.SSHCredential()
             cred.user_id = username
-            session.add_credential(cred)
+            session.add_context(cred)
+
 
             print "Pilot size: %3s Task parallelism: %3s Num tasks: %3s. Session ID: %s" % (ps, tp, tasks, session.uid)
 
@@ -99,7 +100,7 @@ def run_benchmark(config):
             pdesc.cores      = ps
             pdesc.project    = allocation
             pdesc.cleanup    = True
-            pdesc.sandbox    = "/work/00988/tg802352/radical.pilot.sandbox"
+            pdesc.sandbox    = config.WORKDIR
             pdesc.cleanup    = True
 
             pilot = pmgr.submit_pilots(pdesc)

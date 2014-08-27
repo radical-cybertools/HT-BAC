@@ -29,11 +29,9 @@ source $HOME/HT-BAC-Tools/bin/activate
 > ```
 
 
-The latest version of HT-BAC can be installed directly 
-from GitHub:
+The latest version of HT-BAC can be installed directly from GitHub:
 
 ```
-pip install --upgrade git+https://github.com/radical-cybertools/radical.pilot.git@devel#egg=radical.pilot
 pip install --upgrade git+https://github.com/radical-cybertools/radical.ensemblemd.mdkernels.git@release#egg=radical.ensemblemd.mdkernels
 pip install --upgrade git+https://github.com/radical-cybertools/HT-BAC.git@release#egg=radical.ensemblemd.htbac
 ```

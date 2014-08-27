@@ -7,7 +7,7 @@
 RESOURCE   = "archer.ac.uk"                # The name of the remote machine.
 USERNAME   = "ocwe10"                      # Your username on the remote machine.
 ALLOCATION = "e10-ocwe10"                  # The allocation or project to charge.
-WORKDIR    = "/work/e10/e10/ocwe10/HT-BAC" # The working directory ("sandbox")
+WORKDIR    = "/work/e10/e10/ocwe10/htbac"  # The working directory ("sandbox")
 MAXCPUS    = 1024                          # Maximum number of CPUs to allocate.
 
 #------------------------------------------------------------------------------
